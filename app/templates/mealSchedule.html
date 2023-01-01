@@ -9,10 +9,21 @@
 </head>
 
 <body>
-    <h1>Meal Schedule</h1>
 
     <div class="container">
-        <form action="" method="post">
+        <!-- <div class="title">
+          <h1>Meal Schedule</h1>
+        </div> -->
+
+
+
+        <table class="week_schedule_container">
+            <thead class="table_head"></thead>
+            <tbody class="table_body"></tbody>
+        </table>
+
+        <div class="form">
+          <form action="" method="post">
             {{ form.hidden_tag() }}
 
             <p>
@@ -39,275 +50,15 @@
                 {{ form.timeOfMeal() }}
             </div>
 
-            {{ form.submit() }}
-        </form>
-
-        <table class="week_schedule_container">
-            <thead class="table_head"></thead>
-            <tbody class="table_body"></tbody>
-        </table>
-
- <!--
-    <table class="week_schedule_container">
-        <tr>
-          <th></th>
-          <th class="day">Time</th>
-          <th class="day">Monday</th>
-          <th class="day">Tuesday</th>
-          <th class="day">Wednesday</th>
-          <th class="day">Thursday</th>
-          <th class="day">Friday</th>
-          <th class="day">Saturday</th>
-          <th class="day">Sunday</th>
-        </tr>
-        <tr>
-          <td class="hour">12:00 AM</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-            <td class="hour">01:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-           <td class="hour">02:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">03:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">04:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">05:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">06:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">07:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">08:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">09:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">10:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">11:00 AM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">12:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">1:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">2:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">3:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">4:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">5:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">6:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">7:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">8:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">9:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">10:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="hour">11:00 PM</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-
-      </table>
+            <div class="button">
+              {{ form.submit() }}
+            </div>
+          </form>
+        </div>
 
 
--->
 
     </div>
-
     <script src="{{url_for('static', filename='main.js')}}"></script>
     {% block errorModal %}
     {% endblock%}

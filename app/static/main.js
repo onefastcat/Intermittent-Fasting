@@ -20,18 +20,22 @@ document.addEventListener('DOMContentLoaded', function() {
         newRow.classList.add('hour');
 
         if(i < 10){
-            newRow.innerText = `${i}:00 AM`;
+
+            const inner = newRow.appendChild(document.createElement('div'));
+            inner.classList.add('time_column');
+            inner.innerText = `${i}:00 am`;
+
            // newRow.id = `${i}-AM`;
 
         } else if(i > 12){
-            newRow.innerText = `${i-12}:00 PM`;
+            newRow.innerText = `${i-12}:00 pm`;
             //newRow.id = `${i-12}-PM`;
         } else {
-            newRow.innerText = `${i}:00 AM`;
+            newRow.innerText = `${i}:00 am`;
             //newRow.id = `${i}-PM`;
         }
         if(i === 12){
-            newRow.innerText = `12:00 PM`;
+            newRow.innerText = `12:00 pm`;
             //newRow.id = `12-PM`;
         }
 
@@ -49,33 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
         newTitleElement.classList.add('day');
         tableHead = document.getElementById('title');
         tableHead.appendChild(newTitleElement);
+        //---------------------figure this out.---------------
 
-        if(i === 0){
-            newTitleElement.innerText = '';
-            newTitleElement.classList.remove('day');
-            newTitleElement.classList.add('corner');
-        }
-        else if(i === 1) {
-            newTitleElement.innerText = 'Monday';
-        }
-        else if(i === 2) {
-            newTitleElement.innerText = 'Tuesday';
-        }
-        else if(i === 3) {
-            newTitleElement.innerText = 'Wednesday';
-        }
-        else if(i === 4) {
-            newTitleElement.innerText = 'Thurday';
-        }
-        else if(i === 5) {
-            newTitleElement.innerText = 'Friday';
-        }
-        else if(i === 6) {
-            newTitleElement.innerText = 'Saturday';
-        }
-        else if(i === 7) {
-            newTitleElement.innerText = 'Sunday';
-        }
+        setDayText(newTitleElement, i);
+
 
     }
 
@@ -97,7 +78,32 @@ document.addEventListener('DOMContentLoaded', function() {
     //console.log(document.getElementsByClassName('container'));
     //console.log(element);
 
+
+    const x = window.matchMedia("(min-width: 700px)");
+    changeDayText(x);
+    x.addEventListener('change', changeDayText);
+
 }, false);
+
+function changeDayText(x) {
+    if (x.matches) { // If media query matches
+        document.getElementById('Monday').innerText = 'Monday'
+        document.getElementById('Tuesday').innerText = 'Tuesday'
+        document.getElementById('Wednesday').innerText = 'Wednesday'
+        document.getElementById('Thursday').innerText = 'Thursday'
+        document.getElementById('Friday').innerText = 'Friday'
+        document.getElementById('Saturday').innerText = 'Saturday'
+        document.getElementById('Sunday').innerText = 'Sunday'
+    } else {
+        document.getElementById('Monday').innerText = 'M'
+        document.getElementById('Tuesday').innerText = 'T'
+        document.getElementById('Wednesday').innerText = 'W'
+        document.getElementById('Thursday').innerText = 'T'
+        document.getElementById('Friday').innerText = 'F'
+        document.getElementById('Saturday').innerText = 'S'
+        document.getElementById('Sunday').innerText = 'Sun'
+    }
+}
 
 
 
@@ -213,5 +219,46 @@ function fastWindowColor(fast){
 
 
     });
+
+}
+
+function setDayText(element, i){
+
+
+    if(i === 0){
+        element.innerText = '';
+        element.classList.remove('day');
+        element.classList.add('corner');
+    }
+    else if(i === 1) {
+        element.innerText = 'Monday';
+        element.id = 'Monday';
+    }
+    else if(i === 2) {
+        element.innerText = 'Tuesday';
+        element.id = 'Tuesday';
+    }
+    else if(i === 3) {
+        element.innerText = 'Wednesday';
+        element.id = 'Wednesday';
+    }
+    else if(i === 4) {
+        element.innerText = 'Thursday';
+        element.id = 'Thursday';
+    }
+    else if(i === 5) {
+        element.innerText = 'Friday';
+        element.id = 'Friday';
+    }
+    else if(i === 6) {
+        element.innerText = 'Saturday';
+        element.id = 'Saturday';
+    }
+    else if(i === 7) {
+        element.innerText = 'Sunday';
+        element.id = 'Sunday';
+    }
+
+
 
 }

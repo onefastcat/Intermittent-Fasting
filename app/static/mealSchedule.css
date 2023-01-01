@@ -1,61 +1,178 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
 
-body{
+
+html, body{
+
     font-family:Arial, Helvetica, sans-serif;
-}
+    background: rgb(4, 9, 40);
+    margin: 0px;
+    padding: 0px;
+    height: 100vh;
+    overflow: auto;
+
+  }
 
 .container{
-    height: 100vh;
-    width: 100%;
+    align-items: center;
+    color: rgba(237, 237, 237, 0.884);
+    position: relative;
+    top: 10vh;
+    left: 5vw;
+    width: 96%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
 
 
 
-    align-items:center;
+}
+
+.form {
+  margin-left: 2%;
+}
+
+.title {
+  display: flex;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(rgba(255,255,25,0.8), rgb(236, 72, 57));
+  border-radius: 50%;
+  transform: translate(330px, -297px);
+
+}
+
+.container::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(rgb(208, 7, 134), rgb(35, 10, 88));
+  border-radius: 50%;
+  transform: translate(-450px, 250px);
+
+}
+
+
+form{
+  margin: 0 20px 20px 0;
 }
 
 .week_schedule_container{
-    background: linear-gradient(rgb(225, 225, 233), rgb(176, 176, 228));
+  /* width: 100%;
+  margin: 0 auto; */
+  padding: 1rem;
+  border-spacing: 0;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 45px rgba(0,0,0,0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: 1;
 
-    width: 90%;
-    margin: 0 auto;
-    padding: 1rem;
 }
 
-.days_container{
-
-}
 
 
 .day{
-    min-width: 160px;
-    height: 50px;
-    color: rgb(35, 35, 84);
-    border: solid 1px white;
-
-    justify-content: center;
-    align-items: center;
-    margin: 2px;
-    padding: 10px 10px;
+  min-width: 8rem;
+  height: 45px;
+  color: rgb(35, 35, 84);
+  /* border: solid 1px white; */
+  justify-content: center;
+  align-items: center;
+  color:rgba(237, 237, 237, 0.884);
+  font-weight: 100;
+  padding: 10px 10px;
 }
 
-.border-pad{
-    background-color: brown;
+
+
+
+
+/* CSS */
+#submit {
+  background-color: rgba(208, 179, 230, 0.839);
+  border-radius: 8px;
+  border-width: 0;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
+
+#submit:hover {
+  background-color: rgba(245, 180, 248, 0.847);
+}
+
+
+#minimumEatingWindow, #dayOfMeal {
+  --radius: 2em;
+  --baseFg: #301c60;
+  --baseBg: white;
+  --accentFg: #5984e1;
+  --accentBg: #ffffff;
+}
+
+
+input{
+  border-radius: 15px;
+  border: 0;
+  margin: 10px 5px 10px 5px;
+  padding: 3px 3px 4px 7px;
+  font-size: 12px;
+}
+
+select {
+  font: 400 12px/1.3 sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--baseFg);
+  border: 1px solid var(--baseFg);
+  line-height: 1;
+  outline: 0;
+  padding: 0.65em 1.5em 0.55em 0.75em;
+  border-radius: var(--radius);
+  background-color: var(--baseBg);
+  background-image: linear-gradient(var(--baseFg), var(--baseFg)),
+    linear-gradient(-135deg, transparent 50%, var(--accentBg) 50%),
+    linear-gradient(-225deg, transparent 50%, var(--accentBg) 50%),
+    linear-gradient(var(--accentBg) 42%, var(--accentFg) 42%);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
+  background-position: right 20px center, right bottom, right bottom, right bottom;
+  font-size: 11px;
+}
+
+
+
 
 .hour{
     font-size: 11px;;
     height: 20px;
-
-    margin-left: 10px;
-    margin-right: 30px;
-    padding-right: 40px;
-
+    text-align: center;
+    font-size: 10px;
 
 }
+
 
 .corner {
     width: 80px;
@@ -63,14 +180,17 @@ body{
 
 }
 
+
 .data_cell{
 
-    width: 160px;
-    border: solid .5px white;
-
-
-
+    width: 120px;
+    border: solid .5px rgba(255, 255, 255, 0.542);
 }
+
+#fastingHourStart{
+  border: 0;
+}
+
 
 
 .modal {
@@ -89,9 +209,12 @@ body{
 
 
 
+
   /* Modal Content */
   .modal-content {
     background-color: #fefefe;
+    position: relative;
+    display: block;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -99,9 +222,60 @@ body{
   }
 
   .fast{
-    background-color: rgba(255, 0, 0, .4);
+    background-color: rgba(177, 8, 61, 0.7);
   }
 
   .meal{
-    background-color: rgba(81, 216, 63, 0.4)
+    background-color: rgba(65, 205, 109, 0.4)
+  }
+
+
+  #close-button {
+    border: none;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 18px;
+    font-weight: 100;
+
+
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap
+
+  }
+
+
+
+
+  @media screen and (max-width: 1200px) {
+    .day{
+        max-width: 70px;
+        font-size: 15px;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .day{
+        min-width: 40px;
+        font-size: 13px;
+    }
+
+
+  }
+
+  @media screen and (max-width: 400px) {
+    .day{
+        max-width: 30px;
+    }
+
+    .hour{
+        font-size: 9px;
+    }
   }

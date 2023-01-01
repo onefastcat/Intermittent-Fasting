@@ -21,26 +21,15 @@ class MealTime(FlaskForm):
         else:
             number_of_hours_choices.append(hour)
 
-    # for hour in range(-1, 24):
-    #     if hour == -1:
-    #         time_choices.append('')
-    #     elif hour == 0:
-    #         time_choices.append('12 am')
-    #     elif hour < 12:
-    #         time_choices.append(f'{hour} am')
-    #     elif hour == 12:
-    #         time_choices.append('12 pm')
-    #     else:
-    #         time_choices.append(f'{hour-12} pm')
 
     def mealGap(form, field):
         print('here in MealGap')
         print(form.fastingHoursStart.data)
-        # fastingHours = 24 - int(form.fastingHoursStart.data) + int(form.fastingHoursEnd.data)
-        # eatingHours = int(form.minimumEatingWindow.data)
-        # if  eatingHours + fastingHours > 24:
-        #     print('not valitd because of eating window')
-        #     return False
+        fastingHours = 24 - int(form.fastingHoursStart.data.strftime('%H')) + int(form.fastingHoursEnd.data.strftime('%H'))
+        eatingHours = int(form.minimumEatingWindow.data)
+        if  eatingHours + fastingHours > 24:
+            print('not valitd because of eating window')
+            return False
 
 
         # if ('meals' in session) and len(session['meals']) > 0:
