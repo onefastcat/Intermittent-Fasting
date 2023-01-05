@@ -120,25 +120,28 @@ function determineDayFromIndex(i) {
 }
 
 
-function mealTimeColor(mealsArr){
+function mealTimeColor(mealsArr, fast){
 
     let meals = JSON.parse(mealsArr);
+    let fasting = JSON.parse(fast);
 
+    //if fasting is not array it's the originalFastWindow object, which means we are
+    //showing previoud week view which doesn't have meals
+    if(!Array.isArray(fasting)){
+        return;
+    }
+    console.log("----------------meal  Color---------------------");
     document.addEventListener('DOMContentLoaded', () => {
 
      for (let meal of meals){
-         //console.log(meal['timeOfMeal']);
-        // console.log(meal);
+
          let time = meal['timeOfMeal'];
-         const day = meal['dayOfMeal'];
+         let day = meal['dayOfMeal'];
          if(time[0] == '0') {
             time = time.slice(1);
          }
-         //console.log(time);
 
         const el = document.getElementById(time).getElementsByClassName(day)[0];
-
-       // console.log(el)
 
         if(el){
             el.classList.add('meal')
@@ -151,7 +154,7 @@ function mealTimeColor(mealsArr){
 
 
 
-function fastWindowColor(fast){
+function fastWindowColor(fast, meals){
 
     // const fastArr = fast.split(' ');
     // //check why index 0 gives empty space
@@ -160,65 +163,62 @@ function fastWindowColor(fast){
     // console.log('hi from js file');
     //need to convert the r3eceived JSON string into object,
     //so you use object methods on it
-    const fastSchedule = JSON.parse(fast)
-    // console.log(fastSchedule);
+    const fastSchedule = JSON.parse(fast);
+    const mealsList = JSON.parse(meals);
+    console.log("----------------fast  Window  Color---------------------");
+    console.log(fastSchedule);
+
+
+    if(!Array.isArray(fastSchedule)) {
+        let startTime = fastSchedule['startFast'];
+        let endTime = fastSchedule['endFast'];
+        const earliestMeal = mealsList.find(meal => meal['dayOfMeal'] === 'Monday')
+        extraFastHours = parseInt(earliestMeal['timeOfMeal']);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(fastSchedule)
+            for(let i = 0; i < 7; i++) {
+                let day = determineDayFromIndex(i);
+                fastHour = document.getElementsByClassName(day)
+
+                for(let j = 0; j < endTime; j++){
+                    fastHour[j].classList.add('fast');
+                }
+                for(let k = startTime; k < 24; k++){
+                    fastHour[k].classList.add('fast');
+                }
+                // if(day === 'Sunday' && i >= endTime - extraFastHours){
+                //     startTime = endTime - extraFastHours;
+
+                // }
+
+            }
+        });
+    }
 
     //maybe this event listener should listen to form being submitted
     //insted of domcontentLoaded
-    document.addEventListener('DOMContentLoaded', function() {
+    else{
+        document.addEventListener('DOMContentLoaded', function() {
+            for(let i = 0; i < 7; i++) {
+             let day = determineDayFromIndex(i);
+             fastHour = document.getElementsByClassName(day)
+             //won't need to check if it is array because this loop is reused specifically for this. refactor later
+                if(Array.isArray(fastSchedule)){
+                 startTime = fastSchedule[i]['startFast'];
+                 endTime = fastSchedule[i]['endFast']
+                }
+                for(let j = 0; j < endTime; j++){
+                 fastHour[j].classList.add('fast');
 
-        console.log(fastSchedule)
-        for(let i = 0; i < fastSchedule.length; i++) {
+                }
+                for(let k = startTime; k < 24; k++){
+                    fastHour[k].classList.add('fast');
 
-            let day = determineDayFromIndex(i);
-            fastHour = document.getElementsByClassName(day)
-
-            // console.log(fastHour);
-            // console.log(fastSchedule[i]);
-            // console.log(fastSchedule[i]['endFast']);
-            for(let j = 0; j < fastSchedule[i]['endFast']; j++){
-                fastHour[j].classList.add('fast');
-                // console.log(fastHour[j])
+                }
             }
-            for(let k = fastSchedule[i]['startFast']; k < 24; k++){
-                fastHour[k].classList.add('fast');
-                // console.log(fastHour[k])
-            }
-        }
-
-
-
-
-
-    //  // console.log("here " +allHours.length)
-    //   if(allHours){
-    //   //  allHours.getElementsByClassName('data-cell').classList.add('red')
-    //   //change later for 24 hour system instead of +12
-    //   console.log(parseInt(fast.slice(0,3)))
-    //     for(let item = fastStart; item < 24; item++){
-
-    //         //this loop if I set fasting window on all days of the week
-    //         for(let i = 0; i < 7; i++){
-    //             allHours[item].children[i].classList.add('red')
-    //         }
-
-
-
-    //     }
-
-    //     for(let item = 0; item <  fastEnd; item++){
-    //         //this loop if I set fasting window on all days of the week
-    //         for(let i = 0; i < 7; i++){
-    //             allHours[item].children[i].classList.add('red')
-    //         }
-
-
-    //     }
-
-    //   }
-
-
-    });
+        });
+    }
 
 }
 
@@ -229,6 +229,7 @@ function setDayText(element, i){
         element.innerText = '';
         element.classList.remove('day');
         element.classList.add('corner');
+        element.innerHTML = "<a href='http://127.0.0.1:5000/previous-week'><<</a>"
     }
     else if(i === 1) {
         element.innerText = 'Monday';

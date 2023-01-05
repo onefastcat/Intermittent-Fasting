@@ -9,6 +9,8 @@ bp = Blueprint('main', __name__)
 @bp.route('/', methods=["GET", "POST"])
 def main():
 
+
+
     print('--------------in main()-------------')
     form = MealTime()
 
@@ -43,7 +45,7 @@ def main():
             setFormValues(form)
             return render_template('mealSchedule.html', form=form, fastTimes=session['fastWindow'], meals=session['meals'])
 
-        return render_template('mealSchedule.html', form=form)
+        return render_template('mealSchedule.html', form=form, meals=[])
 
 
 
@@ -52,3 +54,11 @@ def timeConflict():
     message = request.args.get('message')
     form = MealTime()
     return render_template('errorModal.html', form=form, message=message)
+
+@bp.route('/previous-week')
+def prevWeek():
+
+    prev = True
+    form = MealTime()
+
+    return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])

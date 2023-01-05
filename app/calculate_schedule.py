@@ -128,16 +128,21 @@ def recalcFastWindow(form):
     if timeOfMeal >= startTime and startTime > endTime:
         for i in range(7):
             if session['fastWindow'][i]['day'] == dayOfMeal:
-
+                #figure out what to to if day is Sunday
+                #introducing j as 0 is a temp solution
+                # this makes Monday of this week the next day
+                # in a circular fashion
+                if i == 6:
+                    j = 0
                 addFastHours = timeOfMeal - session['fastWindow'][i]['startFast'] + 1
 
                 newFastStart = timeOfMeal+1
-                newFastEnd = session['fastWindow'][i+1]['endFast'] + addFastHours
-                if session['fastWindow'][i+1]['startFast'] - newFastEnd < int(session['minimumEatingWindow']):
+                newFastEnd = session['fastWindow'][j]['endFast'] + addFastHours
+                if session['fastWindow'][j]['startFast'] - newFastEnd < int(session['minimumEatingWindow']):
                     return False
                 else:
                     session['fastWindow'][i]['startFast'] = newFastStart
-                    session['fastWindow'][i+1]['endFast'] = newFastEnd
+                    session['fastWindow'][j]['endFast'] = newFastEnd
 
             # recalculating fast window for previous day
     if timeOfMeal < endTime and startTime > endTime:

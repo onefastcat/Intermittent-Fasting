@@ -134,14 +134,17 @@ form{
 
 input{
   border-radius: 15px;
-  background-color: rgba(230, 228, 228, 0.3);
+
   color: rgb(205, 203, 203);
   border: 0;
   margin: 3px 3px;
   padding: 3px 10px 4px 17px;
   font-size: 12px;
 
+  background-color: rgba(230, 228, 228, 0.3);
+
 }
+
 
 #day_input{
   padding-left: 10px;

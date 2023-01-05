@@ -11,11 +11,6 @@
 <body>
 
     <div class="container">
-        <!-- <div class="title">
-          <h1>Meal Schedule</h1>
-        </div> -->
-
-
 
         <table class="week_schedule_container">
             <thead class="table_head"></thead>
@@ -27,13 +22,14 @@
             {{ form.hidden_tag() }}
 
             <div class="form_field">
-            {{form.fastingHoursStart.label}}
-            {{form.fastingHoursStart() }}
+              {{form.fastingHoursStart.label}}
+              {{form.fastingHoursStart() }}
             </div>
 
             <div class="form_field">
-            {{form.fastingHoursEnd.label}}
-            {{form.fastingHoursEnd() }}
+
+              {{form.fastingHoursEnd.label}}
+              {{form.fastingHoursEnd() }}
             </div>
 
             <div class="form_field">
@@ -42,12 +38,12 @@
             </div>
 
             <div class="form_field">
-                <span class="label">
-                  {{form.dayOfMeal.label}}
-                </span>
-                <span id="day_input">
-                  {{ form.dayOfMeal() }}
-                </span>
+              <span class="label">
+                {{form.dayOfMeal.label}}
+              </span>
+              <span id="day_input">
+                {{ form.dayOfMeal() }}
+              </span>
             </div>
             <div class="form_field">
                 <span class="label">
@@ -60,10 +56,6 @@
               <div class="form_field">
                 {{ form.submit() }}
               </div>
-
-
-
-
 
           </form>
           <form>
@@ -86,25 +78,14 @@
 
 {% endblock%}
 {% block script%}
-{% if meals and fastTimes %}
+{% if fastTimes %}
 
 <script type="text/javascript" href="{{ url_for('static', filename='main.js')}}"></script>
 <script type="text/javascript">
 
-  // if(fastTimes !== undefined) {
-  //   var fast = fastTimes
-  //   console.log(fast)
-  // }
 
-  //var fast = "{{ session['fastWindow'] }}"
-
-  // var fast = "{{ fastTimes|tojson }}"
-
-
-  fastWindowColor('{{ fastTimes|tojson }}')
-  mealTimeColor('{{ meals|tojson }}')
-
-
+  fastWindowColor('{{ fastTimes|tojson }}', '{{ meals|tojson }}');
+  mealTimeColor('{{ meals|tojson }}', '{{ fastTimes|tojson }}')
 
 
 
