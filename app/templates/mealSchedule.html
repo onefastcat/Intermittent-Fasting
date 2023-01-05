@@ -26,34 +26,53 @@
           <form action="" method="post">
             {{ form.hidden_tag() }}
 
-            <p>
+            <div class="form_field">
             {{form.fastingHoursStart.label}}
             {{form.fastingHoursStart() }}
-            </p>
+            </div>
 
-            <p>
+            <div class="form_field">
             {{form.fastingHoursEnd.label}}
             {{form.fastingHoursEnd() }}
-            </p>
+            </div>
 
-            <p>
+            <div class="form_field">
               {{form.minimumEatingWindow.label}}
               {{form.minimumEatingWindow() }}
-            </p>
-
-            <div>
-                {{form.dayOfMeal.label}}
-                {{ form.dayOfMeal() }}
             </div>
-            <div>
-                {{form.timeOfMeal.label}}
+
+            <div class="form_field">
+                <span class="label">
+                  {{form.dayOfMeal.label}}
+                </span>
+                <span id="day_input">
+                  {{ form.dayOfMeal() }}
+                </span>
+            </div>
+            <div class="form_field">
+                <span class="label">
+                  {{form.timeOfMeal.label}}
+                </span>
                 {{ form.timeOfMeal() }}
+
             </div>
 
-            <div class="button">
-              {{ form.submit() }}
+              <div class="form_field">
+                {{ form.submit() }}
+              </div>
+
+
+
+
+
+          </form>
+          <form>
+            <div>
+              <a href="{{ url_for('main.main') }}"><button id="reset" name="reset_btn" value="reset">Reset</button></a>
             </div>
           </form>
+
+
         </div>
 
 

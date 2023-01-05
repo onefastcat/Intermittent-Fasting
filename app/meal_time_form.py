@@ -1,18 +1,12 @@
-from flask import session
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField
-from wtforms.validators import DataRequired
-from wtforms.fields import DateField, DateTimeLocalField, TimeField
-from operator import attrgetter
-
-
+from wtforms import SelectField, SubmitField
+from wtforms.validators import InputRequired
+from wtforms.fields import TimeField
 
 
 class MealTime(FlaskForm):
 
-
     number_of_hours_choices = []
-    # time_choices = []
     day_choices = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     for hour in range(0, 24):
@@ -21,32 +15,33 @@ class MealTime(FlaskForm):
         else:
             number_of_hours_choices.append(hour)
 
+    fastingHoursStart = TimeField("Start fast at", validators=[InputRequired()])
+    fastingHoursEnd = TimeField("End fast at", validators=[InputRequired()])
+    minimumEatingWindow = SelectField("Eating window (hours) ", choices=number_of_hours_choices, validators=[InputRequired()])
+    dayOfMeal = SelectField("Meal Day",choices=day_choices, validators=[InputRequired()])
+    timeOfMeal = TimeField("Meal Time", validators=[InputRequired()])
+    submit = SubmitField("Calculate")
 
-    def mealGap(form, field):
-        print('here in MealGap')
-        print(form.fastingHoursStart.data)
-        fastingHours = 24 - int(form.fastingHoursStart.data.strftime('%H')) + int(form.fastingHoursEnd.data.strftime('%H'))
+    def validate_minimumEatingWindow(form, minEatingWindow):
+        startFast = int(form.fastingHoursStart.data.strftime('%H'))
+        endFast = int(form.fastingHoursEnd.data.strftime('%H'))
+
+        fastingHours = abs(endFast - startFast)
         eatingHours = int(form.minimumEatingWindow.data)
+
+        #if eating hours and fasting hours exceed 24 hours return false
         if  eatingHours + fastingHours > 24:
-            print('not valitd because of eating window')
             return False
 
-
-        # if ('meals' in session) and len(session['meals']) > 0:
-
-        #     latestMealTime = max(a['timeOfMeal'] for a in session['meals'])
-        #     # stringTime = str(field.data)[0:2]
-
-            #DEAL WITH THIS LATER
-            # if 24 - int(latestMealTime) + int(stringTime) < int(form.fastingWindow.data):
-            #      return False
         return True
 
+    def validate_start(form, startTime):
+        startFast = int(form.fastingHoursStart.data.strftime('%H'))
+        endFast = int(form.fastingHoursEnd.data.strftime('%H'))
 
+        if(startFast < endFast):
+            print(startFast)
+            print(endFast)
+            return False
 
-    fastingHoursStart = TimeField("Start fasting at", validators=[DataRequired()])
-    fastingHoursEnd = TimeField("Finish fasting at", validators=[DataRequired()])
-    minimumEatingWindow = SelectField("Minimum eating window (hours) ", choices=number_of_hours_choices, validators=[DataRequired()])
-    dayOfMeal = SelectField("Meal Day",choices=day_choices, validators=[DataRequired()])
-    timeOfMeal = TimeField("Meal Time", validators=[DataRequired()])
-    submit = SubmitField("Calculate")
+        return True

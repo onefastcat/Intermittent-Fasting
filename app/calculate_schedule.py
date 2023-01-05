@@ -3,6 +3,9 @@ from datetime import time
 
 
 
+# set the following form values from previous submit
+# these fields are less likely to be changed
+# so they are pre-filled for user convenience
 def setFormValues(form):
     print('------------in setFormValues----------')
     form.fastingHoursEnd.data = time(session['originalFastWindow']['endFast'], 00, 00)
@@ -10,34 +13,19 @@ def setFormValues(form):
     form.minimumEatingWindow.data = session['minimumEatingWindow']
 
 
+
 def fastWindow(form):
     #test time. not real code
 
     print('--------------in calculate_schedule.py-------------')
-    #this should be some type of initialization before form is submitted
-    #runs when you open the page for the first time
-
-
-    #maybe this is not needed now that i check for fastWindow existence inside html
-    # if('fastWindow' not in session):
-    #     print('no fastWindow in session from calculate_schedule.py')
-    #     session['fastWindow'] = [
-    #         {"day":"Monday","startFast":"24", "endFast": "0"},
-    #         {"day":"Tuesday","startFast":"24", "endFast": "0"},
-    #         {"day":"Wednesday","startFast":"24", "endFast": "0"},
-    #         {"day":"Thursday","startFast":"24", "endFast": "0"},
-    #         {"day":"Friday","startFast":"24", "endFast": "0"},
-    #         {"day":"Saturday","startFast":"24", "endFast": "0"},
-    #         {"day":"Sunday","startFast":"24", "endFast": "0"},
-    #     ]
-    #     return session['fastWindow']
-
 
     #I don't like this conditional here. maybe need to check it in the routes.py
     if form.fastingHoursStart.data:
 
         startTime = int(form.fastingHoursStart.data.strftime('%H'))
         endTime = int(form.fastingHoursEnd.data.strftime('%H'))
+
+
 
         if 'fastWindow' not in session:
             session['fastWindow'] = [
@@ -52,59 +40,44 @@ def fastWindow(form):
 
         print('---------------------fastingHours initialized------------------')
 
-        #must be updated if the values in the form are updated
-        #and it does update because start and end values are taken from the form
-        #-------------GO BACK TO THIS--------------------------------------------------
+
+        # setting session object to keep track of beginning of fast and end of fast
+        # even after daily fast window is recalculated
         session['originalFastWindow'] = {'startFast' : startTime,
                                          'endFast' : endTime}
         #------------------------------------------------------------------------------
+        # setting session object to keep track of minimum eating hours in a day
         session['minimumEatingWindow'] = form.minimumEatingWindow.data
 
 
-        if(recalcFastWindow(form)):
+        if(recalcFastWindow(form) and validateMealTime(form)):
+            setSessionMeal(form)
             return True
-        #this loop recalculates each day fasting window based on the meals in session
-        #maybe I on;y need it for the new incoming meal thats not in session yet
-        # for meal in session['meals']:
-        #     #recalculating fast window for next day
-        #     if int(meal['timeOfMeal']) > startTime:
-        #         print('------------------------!!!!!')
-        #         for i in range(7):
-        #             #session['fastWindow'][meal['dayOfMeal']]['startFast'] = int(meal['timeOfMeal'])+1
-        #             if session['fastWindow'][i]['day'] == meal['dayOfMeal']:
-        #                 addFastHours = int(meal['timeOfMeal']) - session['fastWindow'][i]['startFast'] + 1
-        #                 session['fastWindow'][i]['startFast'] = int(meal['timeOfMeal'])+1
-        #                 session['fastWindow'][i+1]['endFast'] += addFastHours
-        #                 if session['fastWindow'][i+1]['startFast'] - session['fastWindow'][i+1]['endFast'] < int(session['minimumEatingWindow']):
-        #                     return False
-        #     # recalculating fast window for previous day
-        #     if int(meal['timeOfMeal']) < endTime:
-        #         for i in range(7):
-        #             if(session['fastWindow'][i]['day'] == meal['dayOfMeal']):
-        #                 print('---------------------------')
-        #                 addFastHours = session['fastWindow'][i]['endFast'] - int(meal['timeOfMeal'])
-        #                 session['fastWindow'][i]['endFast'] = int(meal['timeOfMeal'])
-        #                 session['fastWindow'][i-1]['startFast'] -= addFastHours
-        #                 if session['fastWindow'][i-1]['startFast'] - session['fastWindow'][i-1]['endFast'] < int(session['minimumEatingWindow']):
-        #                     return False
 
-        #                 print('---------------------------')
-
-
-    #maybe no need to return this if I am useing session directly
-    #maybe return True or false. because essentially this module calculates
-    #the fasting window and determines if  it is valid
     return False
 
 def validateMealTime(form):
     print('-------------in validateMealTime----------------')
     dayOfMeal = form.dayOfMeal.data
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
+
     for i in range(7):
         if session['fastWindow'][i]['day'] == dayOfMeal:
+            print(session['fastWindow'][i]['startFast'])
+            print(session['originalFastWindow']['startFast'])
+            if (session['fastWindow'][i]['endFast'] > session['originalFastWindow']['endFast'] and
+                timeOfMeal < session['fastWindow'][i]['endFast']):
+                    print('should place a new meal')
+                    return False
+            if (session['fastWindow'][i]['startFast'] < session['originalFastWindow']['startFast'] and
+                timeOfMeal >= session['fastWindow'][i]['startFast']):
+                    print('meal to late')
+                    return False
             if int(session['minimumEatingWindow']) > int(session['fastWindow'][i]['startFast']) - int(session['fastWindow'][i]['endFast']):
-                 return False
+                    return False
+    return True
 
+def setSessionMeal(form):
     params = {
         'dayOfMeal' : form.dayOfMeal.data,
         'timeOfMeal' : form.timeOfMeal.data.strftime('%H')
@@ -116,20 +89,48 @@ def validateMealTime(form):
     temp.append(params)
     session['meals'] = temp
 
-    return True
+    return
+
+
+def indexToDay(i):
+    #figure out how to handle meals set for Monday which produces index -1
+
+    if i == 0:
+        return 'Monday'
+    elif i == 1:
+        return 'Tuesday'
+    elif i == 2:
+        return 'Wednesday'
+    elif i == 3:
+        return 'Thursday'
+    elif i == 4:
+        return 'Friday'
+    elif i == 5:
+        return 'Saturday'
+    #temporary solution
+    elif i == 6 or i == -1:
+        return 'Sunday'
+    else:
+        raise Exception("index provided is not valid. must be in the range(0,7)")
 
 def recalcFastWindow(form):
     print('-------------in recalcFastingWindow----------------')
     #recalculating fast window for next day
+    originalFastDuration = int(session['originalFastWindow']['startFast']) - int(session['originalFastWindow']['endFast'])
     startTime = int(form.fastingHoursStart.data.strftime('%H'))
     endTime = int(form.fastingHoursEnd.data.strftime('%H'))
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
     dayOfMeal = form.dayOfMeal.data
 
-    if timeOfMeal > startTime:
+
+    #MAYBE SOME PARTS OF THESE TWO HUGE CONDITIONALS BELONG IN VALIDATE MEAL TIME
+    #THIS CHECK DOESNT WORK IF SOMEONE EATS AT TNIGHT AND FASTS DURING DAYtime
+    if timeOfMeal >= startTime and startTime > endTime:
         for i in range(7):
             if session['fastWindow'][i]['day'] == dayOfMeal:
+
                 addFastHours = timeOfMeal - session['fastWindow'][i]['startFast'] + 1
+
                 newFastStart = timeOfMeal+1
                 newFastEnd = session['fastWindow'][i+1]['endFast'] + addFastHours
                 if session['fastWindow'][i+1]['startFast'] - newFastEnd < int(session['minimumEatingWindow']):
@@ -139,22 +140,33 @@ def recalcFastWindow(form):
                     session['fastWindow'][i+1]['endFast'] = newFastEnd
 
             # recalculating fast window for previous day
-    if timeOfMeal < endTime:
+    if timeOfMeal < endTime and startTime > endTime:
         for i in range(7):
             if session['fastWindow'][i]['day'] == dayOfMeal:
                 addFastHours = session['fastWindow'][i]['endFast'] - timeOfMeal
-                newFastStart = session['fastWindow'][i-1]['startFast'] - addFastHours
+
+                   #new fast start hour for previous day
+                if('meals' in session):
+                    prevDay = indexToDay(i-1)
+                    prevDayMeal = dict(filter(lambda meal: meal['dayOfMeal'] == prevDay, session['meals']))
+                    #what is this??????
+                    #this functionality is not done yet. it recalcs fasting hours and makes conflict with\
+                    #existing meals schedules the day before here and day after in the code above
+                    #take care of this
+                    if('timeOfMeal' in prevDayMeal):
+                        print('prevDayMeal prevents new meal')
+                        newFastStart = max(session['fastWindow'][i-1]['startFast'] - addFastHours, int(prevDayMeal['timeOfMeal']))
+                    else:
+                        newFastStart = session['fastWindow'][i-1]['startFast'] - addFastHours
+                else:
+                    newFastStart = session['fastWindow'][i-1]['startFast'] - addFastHours
                 newFastEnd = timeOfMeal
-                if newFastStart - session['fastWindow'][i]['endFast'] < int(session['minimumEatingWindow']) \
-                   or newFastStart - session['fastWindow'][i]['endFast'] < int(session['originalFastWindow']['startFast']) - int(session['originalFastWindow']['endFast']):
+                #what is this?
+                if newFastStart - session['fastWindow'][i-1]['endFast'] < int(session['minimumEatingWindow']) \
+                   or abs(newFastStart + timeOfMeal)< originalFastDuration:
                     return False
                 else:
                     session['fastWindow'][i]['endFast'] = newFastEnd
                     session['fastWindow'][i-1]['startFast'] = newFastStart
-
-
-    #if all checks passed, add meal to session
-    #maybe this should be a separate function
-    validateMealTime(form)
 
     return True
