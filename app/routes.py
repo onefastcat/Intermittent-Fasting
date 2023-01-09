@@ -15,9 +15,16 @@ def main():
     form = MealTime()
 
     #if reset button was clicked clear this session and
-    if request.args.get('reset_btn') == 'reset':
-        session.clear()
-        return redirect(url_for('main.main'))
+
+    #     if reset is not None:
+    # #     # session.clear()
+    # #     # print('lololololololololol')
+    #         return redirect(url_for('main.main'))
+
+
+
+
+
 
     if form.validate_on_submit():
         if not form.validate_minimumEatingWindow(form):
@@ -42,6 +49,7 @@ def main():
     else:
 
         if('meals' in session):
+
             setFormValues(form)
             return render_template('mealSchedule.html', form=form, fastTimes=session['fastWindow'], meals=session['meals'])
 
@@ -58,7 +66,20 @@ def timeConflict():
 @bp.route('/previous-week')
 def prevWeek():
 
-    prev = True
     form = MealTime()
-
+    setFormValues(form)
     return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
+
+@bp.route('/next-week')
+def nextWeek():
+
+    form = MealTime()
+    setFormValues(form)
+    return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
+
+
+@bp.route('/clear')
+def reset():
+    session.clear()
+    form = MealTime()
+    return redirect(url_for('main.main'))
