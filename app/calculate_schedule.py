@@ -144,7 +144,7 @@ def recalcFastWindow(form):
     prevFastDay = findPrevDay(fastDay['day'])
 
 
-    #THIS CHECK DOESNT WORK IF SOMEONE EATS AT TNIGHT AND FASTS DURING DAYtime
+    #THIS CHECK DOESNT WORK IF SOMEONE EATS AT NIGHT AND FASTS DURING DAYtime
     if timeOfMeal >= startTime:
 
         addFastHours = timeOfMeal - fastDay['startFast'] + 1
@@ -168,6 +168,7 @@ def recalcFastWindow(form):
     # recalculating fast window for previous day
     if timeOfMeal < endTime:
         addFastHours = fastDay['endFast'] - timeOfMeal
+
         #why is thjis here??
         if('meals' in session):
 
@@ -191,7 +192,7 @@ def recalcFastWindow(form):
              #check if day is other than Monday. if it is, don't set previous day fastWidnow
             if fastDay['day'] != 'Monday':
                 fastDay['endFast'] = newFastEnd
-                prevFastDay['startFast'] = newFastStart
+                prevFastDay['startFast'] -=  addFastHours
             else:
                 fastDay['endFast'] = newFastEnd
 

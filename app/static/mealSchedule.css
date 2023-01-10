@@ -212,7 +212,6 @@ select {
 
 
 
-
 .hour{
     font-size: 11px;;
     height: 30px;
@@ -223,9 +222,52 @@ select {
 
 
 .corner {
+
     width: 80px;
     height: 50px;
+    position: relative;
 
+
+}
+
+.arrow {
+  /* display: block; */
+  float: right;
+  /* margin-top: .25em; */
+  border-color: transparent;
+  border-top-color: #D00;
+	border-style: solid;
+	border-width: .5em .31em 0;
+	width: 0;
+	height: 0;
+	position: relative;
+  right: 20px;
+
+  line-height: 0;
+}
+
+.next {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  border-width: .6em 0 .6em 1.2em;
+  border-top-color: transparent;
+  border-left-color: #090;
+}
+
+.previous {
+  position: absolute;
+  top: 25px;
+  left: 30px;
+  border-width: .6em 1.2em .6em .0;
+  border-top-color: transparent;
+  border-right-color: #04F;
+}
+
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
 }
 
 

@@ -10,19 +10,16 @@ bp = Blueprint('main', __name__)
 def main():
 
 
-
-    print('--------------in main()-------------')
     form = MealTime()
 
-    #if reset button was clicked clear this session and
 
-    #     if reset is not None:
-    # #     # session.clear()
-    # #     # print('lololololololololol')
-    #         return redirect(url_for('main.main'))
-
+    if request.method == 'GET':
+        if request.args.get('week') == 'next' or request.args.get('week') == 'previous':
+            setFormValues(form)
+            return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
 
 
+    print('--------------in main()-------------')
 
 
 
@@ -67,19 +64,21 @@ def timeConflict():
 def prevWeek():
 
     form = MealTime()
-    setFormValues(form)
+
     return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
 
-@bp.route('/next-week')
+@bp.route('/next-week', methods=['GET', 'POST'])
 def nextWeek():
 
     form = MealTime()
-    setFormValues(form)
+    #temporary solution to post request problem
+    # if request.method == 'POST':
+    #     return redirect(url_for('main.main', form=form, fastTimes=session['originalFastWindow'], meals=session['meals']))
+
     return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
 
 
 @bp.route('/clear')
 def reset():
     session.clear()
-    form = MealTime()
     return redirect(url_for('main.main'))

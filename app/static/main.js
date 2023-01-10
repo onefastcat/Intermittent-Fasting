@@ -170,7 +170,7 @@ function fastWindowColor(fast, meals){
     const fastSchedule = JSON.parse(fast);
     const mealsList = JSON.parse(meals);
     console.log("----------------fast  Window  Color---------------------");
-
+    console.log(fastSchedule)
 
 
     //if Fast schedule is not an array, it is a originalFastWindow
@@ -182,24 +182,27 @@ function fastWindowColor(fast, meals){
         let sundayFastHoursStart = startTime;
         let mondayFastHoursEnd = endTime;
 
+
+
        //check if we are on /next-week url
         if (window.location.href.indexOf("next-week") > -1) {
             let latestMeal = findLatestMeal(mealsList);
 
-            extraFastHours = latestMeal['timeOfMeal'] - startTime + 1;
-            mondayFastHoursEnd = endTime + extraFastHours;
-            console.log('monday extra hours ' + extraFastHours)
-            console.log(mondayFastHoursEnd)
+            //change next week fast time only if the Sunday meal is late enough
+            if(latestMeal['timeOfMeal'] > startTime){
+                extraFastHours = latestMeal['timeOfMeal'] - startTime + 1;
+                mondayFastHoursEnd = endTime + extraFastHours;
+            }
         }
         //
         else if (window.location.href.indexOf("previous-week") > -1) {
             let earliestMeal = findEarliestMeal(mealsList);
 
 
-
-            extraFastHours = endTime - parseInt(earliestMeal['timeOfMeal']);
-            //console.log(extraFastHours)
-            sundayFastHoursStart = startTime - extraFastHours;
+            if(earliestMeal['timeOfMeal'] < endTime){
+                extraFastHours = endTime - parseInt(earliestMeal['timeOfMeal']);
+                sundayFastHoursStart = startTime - extraFastHours;
+            }
 
         }
 
@@ -229,12 +232,15 @@ function fastWindowColor(fast, meals){
 
                 }
             }
+
+
         });
     }
 
     //maybe this event listener should listen to form being submitted
     //insted of domcontentLoaded
     else{
+        console.log('hereeeee')
         document.addEventListener('DOMContentLoaded', function() {
             for(let i = 0; i < 7; i++) {
              let day = determineDayFromIndex(i);
@@ -252,11 +258,59 @@ function fastWindowColor(fast, meals){
                     fastHour[k].classList.add('fast');
 
                 }
+
+
             }
+
+
+
+            if(hasCertainDayMeal(mealsList, 'Sunday')){
+                togglePrevNext('next');
+            }
+            if(hasCertainDayMeal(mealsList, 'Monday')){
+                togglePrevNext('prev');
+            }
+
         });
+
     }
 
+
+
 }
+
+function hasCertainDayMeal(meals, day){
+    console.log('what is goin on')
+
+    for(let meal of meals){
+
+        if (meal['dayOfMeal'] == day){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
+function togglePrevNext(week){
+
+    const corner = document.getElementsByClassName('corner')[0]
+    lastWeek = corner.lastChild;
+    nextWeek = corner.firstChild;
+    console.log('togggggggling')
+    console.log(nextWeek)
+    if(week == 'next'){
+        nextWeek.classList.remove('disabled');
+    }
+    else {
+        lastWeek.classList.remove('disabled');
+    }
+
+
+}
+
 
 function setTableHeader(element, i){
 
@@ -265,14 +319,31 @@ function setTableHeader(element, i){
         element.innerText = '';
         element.classList.remove('day');
         element.classList.add('corner');
-        if (window.location.href.indexOf("next-week") > -1) {
 
-            element.innerHTML = "<a  id='arrow_back' href='/'><<</a><a id='arrow_forward' href='/next-week'>>></a>"
-        } else if (window.location.href.indexOf("previous-week") > -1) {
-            element.innerHTML = "<a id='arrow_back' href='/previous-week'><<</a><a id='arrow_forward' href='/'>>></a>"
+        const queryString = window.location.search;
+        const params = new URLSearchParams(queryString);
+        const week = params.get('week');
+
+
+         if (week === 'next') {
+
+           element.innerHTML = "<a class='arrow previous' id='arrow_back' href='/'></a><a class='arrow next' id='arrow_forward' href='/?week=next'></a>";
+           element.lastChild.classList.add('disabled');
+
+         } else if (week === 'previous') {
+
+            element.innerHTML = "<a class='arrow previous' id='arrow_back' href='/?week=previous'></a><a class='arrow next' id='arrow_forward' href='/'></a>"
+            element.firstChild.classList.add('disabled');
+
         } else {
-            element.innerHTML = "<a id='arrow_back' href='/previous-week'><<</a><a id='arrow_forward' href='/next-week'>>></a>"
+
+            element.innerHTML = "<a class='arrow next' id='arrow_forward' href='/?week=next'></a><a class='arrow previous' id='arrow_back' href='/?week=previous'></a>"
+            element.firstChild.classList.add('disabled');
+            element.lastChild.classList.add('disabled');
+
         }
+
+
 
     }
     else if(i === 1) {
