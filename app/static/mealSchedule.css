@@ -83,6 +83,7 @@ a {
 
 
 
+
 .week_schedule_container{
   width: 94%;
   height: 100px;
@@ -389,6 +390,14 @@ a.disabled {
     padding-bottom: 0;
   }
 
+  .hour {
+    font-size: 11px;
+  }
+
+  .corner {
+    font-size: 12px;
+  }
+
 
   }
 
@@ -420,6 +429,14 @@ a.disabled {
       padding-bottom: 0;
     }
 
+    .hour {
+      font-size: 10px;
+    }
+
+    .corner {
+      font-size: 12px;
+    }
+
   }
 
   @media screen and (max-width: 700px) {
@@ -436,6 +453,10 @@ a.disabled {
 
     .hour {
       font-size: 9px;
+    }
+
+    .corner {
+      font-size: 10px;
     }
 
   }
