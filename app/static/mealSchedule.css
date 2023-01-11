@@ -431,6 +431,6 @@ a.disabled {
     .data_cell{
 
       width: 120px;
-      border: solid thin rgba(255, 255, 255, 0.542);
+      border: solid 2px rgba(255, 255, 255, 0.542);
   }
   }
