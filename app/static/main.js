@@ -76,11 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    //document.getElementsByClassName('hour').appendChild(div);
-   // const element = document.getElementsByClassName('container')[0];
-    ///element.appendChild(div);
-    //console.log(document.getElementsByClassName('container'));
-    //console.log(element);
 
 
     const x = window.matchMedia("(min-width: 700px)");
@@ -140,7 +135,7 @@ function mealTimeColor(mealsArr, fast){
 
         return;
     }
-    console.log("----------------meal  Color---------------------");
+
     document.addEventListener('DOMContentLoaded', () => {
 
      for (let meal of meals){
@@ -169,8 +164,6 @@ function fastWindowColor(fast, meals){
 
     const fastSchedule = JSON.parse(fast);
     const mealsList = JSON.parse(meals);
-    console.log("----------------fast  Window  Color---------------------");
-    console.log(fastSchedule)
 
 
     //if Fast schedule is not an array, it is a originalFastWindow
@@ -207,7 +200,7 @@ function fastWindowColor(fast, meals){
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-           // console.log(fastSchedule)
+
             for(let i = 0; i < 7; i++) {
                 let day = determineDayFromIndex(i);
                 fastHour = document.getElementsByClassName(day)
@@ -240,13 +233,13 @@ function fastWindowColor(fast, meals){
     //maybe this event listener should listen to form being submitted
     //insted of domcontentLoaded
     else{
-        console.log('hereeeee')
+
         document.addEventListener('DOMContentLoaded', function() {
             for(let i = 0; i < 7; i++) {
              let day = determineDayFromIndex(i);
              fastHour = document.getElementsByClassName(day)
              //won't need to check if it is array because this loop is reused specifically for this. refactor later
-                console.log(day)
+
                 startTime = fastSchedule[i]['startFast'];
                 endTime = fastSchedule[i]['endFast']
 
@@ -280,7 +273,7 @@ function fastWindowColor(fast, meals){
 }
 
 function hasCertainDayMeal(meals, day){
-    console.log('what is goin on')
+
 
     for(let meal of meals){
 
@@ -299,8 +292,7 @@ function togglePrevNext(week){
     const corner = document.getElementsByClassName('corner')[0]
     lastWeek = corner.lastChild;
     nextWeek = corner.firstChild;
-    console.log('togggggggling')
-    console.log(nextWeek)
+
     if(week == 'next'){
         nextWeek.classList.remove('disabled');
     }
