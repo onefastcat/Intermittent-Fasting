@@ -60,24 +60,6 @@ def timeConflict():
     form = MealTime()
     return render_template('errorModal.html', form=form, message=message)
 
-@bp.route('/previous-week')
-def prevWeek():
-
-    form = MealTime()
-
-    return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
-
-@bp.route('/next-week', methods=['GET', 'POST'])
-def nextWeek():
-
-    form = MealTime()
-    #temporary solution to post request problem
-    # if request.method == 'POST':
-    #     return redirect(url_for('main.main', form=form, fastTimes=session['originalFastWindow'], meals=session['meals']))
-
-    return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
-
-
 @bp.route('/clear')
 def reset():
     session.clear()

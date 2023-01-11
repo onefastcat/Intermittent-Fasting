@@ -20,28 +20,39 @@
           <form action="" method="post">
            {{ form.hidden_tag() }}
 
-
+            <div>
             {{form.fastingHoursStart.label}}
             {{form.fastingHoursStart() }}
-
+            </div>
+            <div>
 
             {{form.fastingHoursEnd.label}}
             {{form.fastingHoursEnd() }}
-
+            </div>
+            <div>
             {{form.minimumEatingWindow.label}}
             {{form.minimumEatingWindow() }}
+            </div>
+            <div>
 
               {{form.dayOfMeal.label}}
 
               {{ form.dayOfMeal() }}
+            </div>
+            <div>
 
               {{form.timeOfMeal.label}}
 
               {{ form.timeOfMeal() }}
-
+            </div>
+            <div>
               {{ form.submit() }}
+            </div>
+            <div>
 
              <a href="/clear" type="reset" id='reset' name="reset_btn" value="Refresh">Refresh</a>
+            </div>
+
 
           </form>
 
