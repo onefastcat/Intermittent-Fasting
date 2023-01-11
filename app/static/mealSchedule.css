@@ -219,7 +219,7 @@ select {
     font-size: 11px;;
     height: 30px;
     text-align: center;
-    font-size: clamp(8px, 2vh, 12px);
+    font-size: clamp(6px, 2vh, 12px);
 
 }
 
@@ -432,5 +432,10 @@ a.disabled {
 
       width: 120px;
       border: solid 1px rgba(255, 255, 255, 0.542);
-  }
+    }
+
+    .hour {
+      font-size: 6px;
+    }
+
   }
