@@ -1,8 +1,37 @@
+const menu = document.querySelector('.hamburger');
+const nav = document.querySelector('#navbar');
+
+menu.addEventListener('click', function() {
+    menu.classList.toggle('active');
+    nav.classList.toggle('active');
+});
+
+
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var div = document.createElement('div');
     div.id = 'container2';
     div.innerText = 'Hi there!';
     div.className = 'border-pad';
+
+
+    //closes the dropdown when width becomes over 850, so that if width decreases, the menu is closed.
+    const y = window.matchMedia("(max-width: 850px)");
+
+    y.addEventListener('change', function() {
+        if(y.matches){
+            nav.classList.remove('active');
+            menu.classList.remove('active');
+        }
+    });
+
+
 
 
 
@@ -87,13 +116,16 @@ document.addEventListener('DOMContentLoaded', function() {
     changeDayText(x);
     x.addEventListener('change', changeDayText);
 
+
 }, false);
+
 
 
 
 
 function changeDayText(x) {
     if (x.matches) { // If media query matches
+
         document.getElementById('Monday').innerText = 'Monday'
         document.getElementById('Tuesday').innerText = 'Tuesday'
         document.getElementById('Wednesday').innerText = 'Wednesday'
@@ -102,6 +134,7 @@ function changeDayText(x) {
         document.getElementById('Saturday').innerText = 'Saturday'
         document.getElementById('Sunday').innerText = 'Sunday'
     } else {
+
         document.getElementById('Monday').innerText = 'M'
         document.getElementById('Tuesday').innerText = 'T'
         document.getElementById('Wednesday').innerText = 'W'

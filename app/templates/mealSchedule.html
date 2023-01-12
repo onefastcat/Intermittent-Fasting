@@ -11,8 +11,10 @@
 <body>
 
 
+  <div class="container">
 
-    <div class="container">
+
+    <div class="nav_container">
 
       <nav id="navbar" class = "sticky">
 
@@ -56,22 +58,31 @@
 
           </form>
 
+
+
         </div>
+
+        <button class="hamburger active">
+          <div class="bar"></div>
+
+        </button>
+
+
 
       </nav>
 
+    </div>
+    <div class="week">
 
-
-
-        <table class="week_schedule_container">
+      <table class="week_schedule_container">
             <thead class="table_head"></thead>
             <tbody class="table_body"></tbody>
-        </table>
-
-
-
+      </table>
 
     </div>
+
+
+  </div>
     <script src="{{url_for('static', filename='main.js')}}"></script>
     {% block errorModal %}
     {% endblock%}
