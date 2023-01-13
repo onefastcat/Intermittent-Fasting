@@ -1,10 +1,15 @@
+
 const menu = document.querySelector('.hamburger');
 const nav = document.querySelector('#navbar');
+
+
+
 
 menu.addEventListener('click', function() {
     menu.classList.toggle('active');
     nav.classList.toggle('active');
 });
+
 
 
 
@@ -22,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     //closes the dropdown when width becomes over 850, so that if width decreases, the menu is closed.
-    const y = window.matchMedia("(max-width: 850px)");
+    const y = window.matchMedia("(min-width: 850px)");
 
     y.addEventListener('change', function() {
         if(y.matches){
