@@ -1,6 +1,4 @@
-
-
-html, body{
+html, body {
 
     font-family:Arial, Helvetica, sans-serif;
     background: #135b7c;
@@ -16,7 +14,7 @@ html, body{
     flex-direction: column;
   }
 
-.nav_container{
+.nav_container {
     align-items: center;
     color: rgba(237, 237, 237, 0.884);
     position: relative;
@@ -31,12 +29,6 @@ html, body{
 }
 
 
-
-/* .title {
-  display: flex;
-} */
-
-
 form {
   display: flex;
   flex-direction: row;
@@ -45,16 +37,9 @@ form {
 
   align-items:flex-end;
   margin: 30px 30px 20px 0px;
-  /* padding-right: 6vw; */
   position: relative;
   font-size: clamp(9px, 5vh, 14px);
 
-
-  /* vertical-align: bottom; */
-
-
-  /* font-size: clamp(9px, 5vh, 14px); */
-   /* width: clamp(200px, 50vw 1500px); */
 }
 
 
@@ -68,15 +53,7 @@ form {
   width: 96%;
   position: relative;
 
-
-  /* margin: 0 30px 0;
-  padding: 0 2rem 0; */
-  /* width: clamp(400px, 60vw 1500px); */
-
-
 }
-
-
 
 
 
@@ -96,10 +73,7 @@ a {
 }
 
 
-
-
-
-.week_schedule_container{
+.week_schedule_container {
   width: 94%;
   height: 100px;
 
@@ -117,11 +91,8 @@ a {
 
 
 
-.day{
-  /* min-width: 8rem; */
+.day {
   height: 45px;
-
-  /* border: solid 1px white; */
   justify-content: center;
   align-items: center;
   color:rgba(237, 237, 237, 0.884);
@@ -153,7 +124,6 @@ thead tr .day {
   font-weight: 500;
   line-height: 20px;
   list-style: none;
-  /* margin: .2rem .2rem; */
   padding: .4rem 1rem;
   text-align: center;
   transition: all 200ms;
@@ -179,25 +149,20 @@ thead tr .day {
 }
 
 
+input {
 
-
-
-input{
   border-radius: 15px;
-
   color: rgb(235, 230, 230);
   border: 0;
   margin: 0 12px 0 12px;
   padding: 3px 7px 4px 25px;
-  /* font-size: clamp(9px, 2vh, 14px); */
-
   background-color: rgba(230, 228, 228, 0.3);
   width: 100px;
 
 }
 
 
-#day_input{
+#day_input {
   padding-left: 10px;
 }
 
@@ -234,20 +199,20 @@ select {
 
 .hour{
 
-    height: 30px;
-    text-align: center;
-    font-size: 1.5vh;
-    color:rgba(237, 237, 237, 0.884);
+  height: 30px;
+  text-align: center;
+  font-size: 1.5vh;
+  color:rgba(237, 237, 237, 0.884);
 
 }
 
 
 .corner {
 
-    width: 80px;
-    height: 50px;
-    position: relative;
-    font-size: clamp(9px, 3vw, 14px);
+  width: 80px;
+  height: 50px;
+  position: relative;
+  font-size: clamp(9px, 3vw, 14px);
 
 
 }
@@ -301,8 +266,8 @@ a.disabled {
 
 .data_cell{
 
-    width: 120px;
-    border: solid .5px rgba(255, 255, 255, 0.542);
+  width: 120px;
+  border: solid .5px rgba(255, 255, 255, 0.542);
 }
 
 #fastingHourStart{
@@ -312,24 +277,24 @@ a.disabled {
 
 
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
 
 
 
 
   /* Modal Content */
-  .modal-content {
+.modal-content {
     background-color: #ff8d50;
     position: relative;
     display: block;
@@ -339,18 +304,18 @@ a.disabled {
     width: 80%;
     border-radius: 10px;
     font-size: 15px;
-  }
+}
 
-  #close-button{
+#close-button{
     position: absolute;
     top: 16px;
     right: 17px;
     background-color: #c08585;
     font-size:larger;
 
-  }
+}
 
-  .messages {
+.messages {
     display: flex;
     justify-content: center;
     position: absolute;
@@ -384,17 +349,17 @@ a.disabled {
     right: 4%;
   }
 
-  .fast{
-    background-color: rgba(250, 57, 4, 0.68);
-  }
+.fast{
+  background-color: rgba(250, 57, 4, 0.68);
+}
 
-  .meal{
-    background-color: rgba(65, 205, 109, 0.4)
-  }
+.meal{
+   background-color: rgba(65, 205, 109, 0.4)
+}
 
 
 
-  @media screen and (max-width: 1400px) {
+@media screen and (max-width: 1400px) {
     .day{
         max-width: 70px;
         font-size: 15px;
@@ -405,12 +370,12 @@ a.disabled {
     }
 
 
-  }
+}
 
 
 
 
-  @media screen and (max-width: 1200px) {
+@media screen and (max-width: 1200px) {
     .day{
       max-width: 70px;
       font-size: 15px;
@@ -435,9 +400,9 @@ a.disabled {
   }
 
 
-  }
+}
 
-  @media screen and (max-width: 850px) {
+@media screen and (max-width: 850px) {
 
     .nav_container {
       width: 100%;
@@ -554,4 +519,4 @@ a.disabled {
       font-size: 14px;
     }
 
-  }
+}

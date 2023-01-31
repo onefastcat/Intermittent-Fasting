@@ -24,18 +24,16 @@ def fastWindow(form):
         startTime = int(form.fastingHoursStart.data.strftime('%H'))
         endTime = int(form.fastingHoursEnd.data.strftime('%H'))
 
-
-
         if 'fastWindow' not in session:
             session['fastWindow'] = [
                 {"day":"Monday", "startFast": startTime, "endFast": endTime},
-                {"day":"Tuesday", "startFast":startTime, "endFast": endTime},
-                {"day":"Wednesday", "startFast":startTime, "endFast": endTime},
-                {"day":"Thursday", "startFast":startTime, "endFast": endTime},
-                {"day":"Friday", "startFast":startTime, "endFast": endTime},
-                {"day":"Saturday", "startFast":startTime, "endFast": endTime},
-                {"day":"Sunday", "startFast":startTime, "endFast": endTime},
-             ]
+                {"day":"Tuesday", "startFast": startTime, "endFast": endTime},
+                {"day":"Wednesday", "startFast": startTime, "endFast": endTime},
+                {"day":"Thursday", "startFast": startTime, "endFast": endTime},
+                {"day":"Friday", "startFast": startTime, "endFast": endTime},
+                {"day":"Saturday", "startFast": startTime, "endFast": endTime},
+                {"day":"Sunday", "startFast": startTime, "endFast": endTime},
+            ]
 
         print('---------------------fastingHours initialized------------------')
 
@@ -55,8 +53,11 @@ def fastWindow(form):
 
     return False
 
+
+# this method checks if new meal time generates conflict with other already existing meals
 def validateMealTime(form):
     print('-------------in validateMealTime----------------')
+    # extract meal data (day and time)
     dayOfMeal = form.dayOfMeal.data
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
     #extract the relevant day where meal is to be placed
@@ -64,24 +65,51 @@ def validateMealTime(form):
     nextFastDay = findNextDay(dayOfMeal)
     prevFastDay = findPrevDay(dayOfMeal)
 
+    # if there are already other meals in session
+    # check if there is any conflict with those meals.
+    # older meals have precedence
     if('meals' in session):
         prevDayMealList = list(filter(lambda meal: meal['dayOfMeal'] == prevFastDay['day'], session['meals']))
         nextDayMealList = list(filter(lambda meal: meal['dayOfMeal'] == nextFastDay['day'], session['meals']))
         originalFastDuration = int(session['originalFastWindow']['startFast']) - int(session['originalFastWindow']['endFast'])
 
+        originalFastStart = int(session['originalFastWindow']['startFast'])
+        originalFastEnd = int(session['originalFastWindow']['endFast'])
+        minimumEatingWindow = int(session['minimumEatingWindow'])
         # find latest meal from previous day, if there isn't return an empty dictionary
         # which will be evaluated in the next conditional to False
         latestMeal = max(prevDayMealList, key=lambda x: x['timeOfMeal']) if prevDayMealList else {}
         earliestMeal = min(nextDayMealList, key=lambda x: x['timeOfMeal']) if nextDayMealList else {}
 
-        if (latestMeal and 24 - int(latestMeal['timeOfMeal']) + timeOfMeal - 1 <
-            originalFastDuration):
-                print('calculates back to previoous day')
-                return False
-        if (earliestMeal and int(earliestMeal['timeOfMeal']) + 24 - timeOfMeal - 1 <
-            originalFastDuration):
-                print('calculating forward to next day')
-                return False
+
+
+
+        # handle Monday and Sunday differently because we add meals only within one week
+        # so calculation of Monday and Sunday depends solely on the minimumEatingWindow
+        if dayOfMeal == 'Monday' and timeOfMeal < originalFastEnd:
+            newFastStart = originalFastStart - (originalFastEnd - timeOfMeal)
+            if newFastStart - originalFastEnd < minimumEatingWindow:
+                    return False
+            else:
+                 return True
+
+        if dayOfMeal == 'Sunday' and timeOfMeal > originalFastStart:
+            extraHours = timeOfMeal - originalFastStart
+            if originalFastStart - originalFastEnd + extraHours < minimumEatingWindow:
+                    return False
+            else:
+                 return True
+
+        # if there is a meal the day before or next day,
+        # and if that meal is within the original fast window duration
+        # don't allow to set this new meal and return false
+        else:
+            if (latestMeal and 24 - int(latestMeal['timeOfMeal']) + timeOfMeal - 1 <
+                originalFastDuration):
+                    return False
+            if (earliestMeal and 24 + int(earliestMeal['timeOfMeal']) - timeOfMeal - 1 <
+                originalFastDuration):
+                    return False
 
     return True
 
@@ -154,7 +182,7 @@ def recalcFastWindow(form):
 
     #THIS CHECK isnt meant to WORK IF SOMEONE EATS AT NIGHT AND FASTS DURING DAYtime
     if timeOfMeal >= startTime:
-
+        # initialize number of additional fast hours
         addFastHours = timeOfMeal - fastDay['startFast'] + 1
         newFastStart = timeOfMeal+1
         if fastDay['day'] != 'Sunday':

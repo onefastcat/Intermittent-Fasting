@@ -1,24 +1,20 @@
 
-const menu = document.querySelector('.hamburger');
-const nav = document.querySelector('#navbar');
-
-
-
-
-menu.addEventListener('click', function() {
-    menu.classList.toggle('active');
-    nav.classList.toggle('active');
-});
-
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
-    var div = document.createElement('div');
-    div.id = 'container2';
-    div.innerText = 'Hi there!';
-    div.className = 'border-pad';
+    // var div = document.createElement('div');
+    // div.id = 'container2';
+    // div.innerText = 'Hi there!';
+    // div.className = 'border-pad';
 
+
+    const menu = document.querySelector('.hamburger');
+    const nav = document.querySelector('#navbar');
+
+
+    menu.addEventListener('click', function() {
+        menu.classList.toggle('active');
+        nav.classList.toggle('active');
+    });
 
     //closes the dropdown when width becomes over 850, so that if width decreases, the menu is closed.
     const y = window.matchMedia("(min-width: 850px)");
@@ -29,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
             menu.classList.remove('active');
         }
     });
-
 
 
     const parent = document.getElementsByClassName('table_head')[0];
@@ -47,33 +42,30 @@ document.addEventListener('DOMContentLoaded', function() {
         if(i === 0) {
             newRow.innerText = `12:00 am`;
         }
-
         else if(i < 10){
 
             const inner = newRow.appendChild(document.createElement('div'));
             inner.classList.add('time_column');
             inner.innerText = `${i}:00 am`;
 
-           // newRow.id = `${i}-AM`;
-
-        } else if(i > 12){
-            newRow.innerText = `${i-12}:00 pm`;
-            //newRow.id = `${i-12}-PM`;
-        } else {
-            newRow.innerText = `${i}:00 am`;
-            //newRow.id = `${i}-PM`;
         }
+        else if(i > 12){
+            newRow.innerText = `${i-12}:00 pm`;
+
+        }
+        else {
+            newRow.innerText = `${i}:00 am`;
+
+        }
+
         if(i === 12){
             newRow.innerText = `12:00 pm`;
-            //newRow.id = `12-PM`;
+
         }
 
         newRow.id = i;
-
         tableBody.appendChild(newRow);
-
     }
-
 
     const daysInAWeek = 7;
 
@@ -100,13 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
             hourElement[row].appendChild(newData);
         }
     }
-
-    //document.getElementsByClassName('hour').appendChild(div);
-   // const element = document.getElementsByClassName('container')[0];
-    ///element.appendChild(div);
-    //console.log(document.getElementsByClassName('container'));
-    //console.log(element);
-
 
     const x = window.matchMedia("(min-width: 700px)");
     changeDayText(x);
@@ -164,8 +149,6 @@ function mealTimeColor(mealsArr, fast){
     //if fasting is not array it's the originalFastWindow object, which means we are
     //showing previoud week view which doesn't have meals
     if(!Array.isArray(fasting)){
-        // const el = document.getElementById('previous-week');
-        // el.style = 'display: none;'
 
         return;
     }
