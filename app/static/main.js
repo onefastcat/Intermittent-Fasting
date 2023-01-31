@@ -13,12 +13,6 @@ menu.addEventListener('click', function() {
 
 
 
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     var div = document.createElement('div');
     div.id = 'container2';
@@ -35,9 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
             menu.classList.remove('active');
         }
     });
-
-
-
 
 
 
@@ -213,6 +204,7 @@ function fastWindowColor(fast, meals){
 
     //if Fast schedule is not an array, it is a originalFastWindow
     // object that contains only startFast and endFast times
+    //maybe its better to check for url query string instead of whether it is an array or object
 
     if(!Array.isArray(fastSchedule)) {
         let startTime = fastSchedule['startFast'];
@@ -247,6 +239,8 @@ function fastWindowColor(fast, meals){
 
         }
 
+        // deal with this mess
+
         document.addEventListener('DOMContentLoaded', function() {
            // console.log(fastSchedule)
             for(let i = 0; i < 7; i++) {
@@ -267,6 +261,8 @@ function fastWindowColor(fast, meals){
                 }
                 for(let j = 0; j < endTime; j++){
                     fastHour[j].classList.add('fast');
+
+
                 }
                 for(let k = startTime; k < 24; k++){
                     fastHour[k].classList.add('fast');

@@ -49,7 +49,7 @@ def fastWindow(form):
         session['minimumEatingWindow'] = form.minimumEatingWindow.data
 
 
-        if(recalcFastWindow(form) and validateMealTime(form)):
+        if(validateMealTime(form) and recalcFastWindow(form)):
             setSessionMeal(form)
             return True
 
@@ -61,18 +61,27 @@ def validateMealTime(form):
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
     #extract the relevant day where meal is to be placed
     fastDay = list(filter(lambda day: day['day'] == dayOfMeal, session['fastWindow']))[0]
+    nextFastDay = findNextDay(dayOfMeal)
+    prevFastDay = findPrevDay(dayOfMeal)
 
+    if('meals' in session):
+        prevDayMealList = list(filter(lambda meal: meal['dayOfMeal'] == prevFastDay['day'], session['meals']))
+        nextDayMealList = list(filter(lambda meal: meal['dayOfMeal'] == nextFastDay['day'], session['meals']))
+        originalFastDuration = int(session['originalFastWindow']['startFast']) - int(session['originalFastWindow']['endFast'])
 
-    if (fastDay['endFast'] > session['originalFastWindow']['endFast'] and
-       timeOfMeal < fastDay['endFast']):
-            print('should place a new meal')
-            return False
-    if (fastDay['startFast'] < session['originalFastWindow']['startFast'] and
-        timeOfMeal >= fastDay['startFast']):
-            print('meal to late')
-            return False
-    if int(session['minimumEatingWindow']) > int(fastDay['startFast']) - fastDay['endFast']:
-            return False
+        # find latest meal from previous day, if there isn't return an empty dictionary
+        # which will be evaluated in the next conditional to False
+        latestMeal = max(prevDayMealList, key=lambda x: x['timeOfMeal']) if prevDayMealList else {}
+        earliestMeal = min(nextDayMealList, key=lambda x: x['timeOfMeal']) if nextDayMealList else {}
+
+        if (latestMeal and 24 - int(latestMeal['timeOfMeal']) + timeOfMeal - 1 <
+            originalFastDuration):
+                print('calculates back to previoous day')
+                return False
+        if (earliestMeal and int(earliestMeal['timeOfMeal']) + 24 - timeOfMeal - 1 <
+            originalFastDuration):
+                print('calculating forward to next day')
+                return False
 
     return True
 
@@ -125,7 +134,6 @@ def findPrevDay(day):
         prevDay = 'Saturday'
     else:
         #deal with this later. figure out what type of exception to raise
-        print(day)
         raise Exception('day name not valid. provide valid day name')
 
     return list(filter(lambda day: day['day'] == prevDay, session['fastWindow']))[0]
@@ -144,7 +152,7 @@ def recalcFastWindow(form):
     prevFastDay = findPrevDay(fastDay['day'])
 
 
-    #THIS CHECK DOESNT WORK IF SOMEONE EATS AT NIGHT AND FASTS DURING DAYtime
+    #THIS CHECK isnt meant to WORK IF SOMEONE EATS AT NIGHT AND FASTS DURING DAYtime
     if timeOfMeal >= startTime:
 
         addFastHours = timeOfMeal - fastDay['startFast'] + 1
@@ -156,7 +164,6 @@ def recalcFastWindow(form):
 
         if fastDay['day'] == 'Sunday':
             if session['originalFastWindow']['startFast'] - newFastEnd < int(session['minimumEatingWindow']):
-                print('entered the twilight zone')
                 return False
             fastDay['startFast'] = newFastStart
         elif fastDay['day'] != 'Sunday':
@@ -172,17 +179,23 @@ def recalcFastWindow(form):
         #why is thjis here??
         if('meals' in session):
 
-            prevDayMeal = dict(filter(lambda meal: meal['dayOfMeal'] == prevFastDay['day'], session['meals']))
+            prevDayMeal = dict(filter(lambda meal: meal['dayOfMeal'] == prevFastDay, session['meals']))
+            print(prevDayMeal)
             #what is this??????
             #this functionality is not done yet. it recalcs fasting hours and makes conflict with\
             #existing meals schedules the day before here and day after in the code above
             #take care of this
             if('timeOfMeal' in prevDayMeal):
+
+                if prevDayMeal['timeOfMeal'] >= session['originalFastWindow']['startFast']:
+                    print('prevDay meal exists and time is later than original fast')
+                    return False
                 newFastStart = max(prevFastDay['startFast'] - addFastHours, int(prevDayMeal['timeOfMeal']))
             else:
                 newFastStart = prevFastDay['startFast'] - addFastHours
         else:
             newFastStart = prevFastDay['startFast'] - addFastHours
+
         newFastEnd = timeOfMeal
                 #what is this?
         if newFastStart - prevFastDay['endFast'] < int(session['minimumEatingWindow']) \

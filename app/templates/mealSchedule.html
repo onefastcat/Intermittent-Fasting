@@ -63,24 +63,45 @@
       </nav>
 
     </div>
+
+
+
+
+
+
     <div class="week">
+
 
       <table class="week_schedule_container">
             <thead class="table_head"></thead>
             <tbody class="table_body"></tbody>
       </table>
 
+
+
+    </div>
+    <div class="messages">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert">
+          <span class="close_btn" onclick="this.parentElement.style.display='none';">&times;</span>
+          {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
     </div>
 
 
   </div>
-    <script src="{{url_for('static', filename='main.js')}}"></script>
-    {% block errorModal %}
-    {% endblock%}
-</body>
-{% block javascript %}
 
-{% endblock%}
+
+    <script src="{{url_for('static', filename='main.js')}}"></script>
+</body>
+<!-- {% block javascript %}
+
+{% endblock%} -->
 {% block script%}
 {% if fastTimes %}
 

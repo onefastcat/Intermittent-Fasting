@@ -27,24 +27,30 @@ html, body{
     justify-content: center;
     flex-direction: column;
     height: auto;
+
 }
 
 
 
-.title {
+/* .title {
   display: flex;
-}
+} */
 
 
-form{
-   display: flex;
-   /* justify-content:space-between; */
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content:space-around;
   text-align: center;
-  align-items: center;
-  margin: 30px 0px 20px 0px;
-  padding-right: 6vw;
+
+  align-items:flex-end;
+  margin: 30px 30px 20px 0px;
+  /* padding-right: 6vw; */
   position: relative;
   font-size: clamp(9px, 5vh, 14px);
+
+
+  /* vertical-align: bottom; */
 
 
   /* font-size: clamp(9px, 5vh, 14px); */
@@ -61,6 +67,8 @@ form{
 
   width: 96%;
   position: relative;
+
+
   /* margin: 0 30px 0;
   padding: 0 2rem 0; */
   /* width: clamp(400px, 60vw 1500px); */
@@ -145,7 +153,7 @@ thead tr .day {
   font-weight: 500;
   line-height: 20px;
   list-style: none;
-  margin: .2rem .2rem;
+  /* margin: .2rem .2rem; */
   padding: .4rem 1rem;
   text-align: center;
   transition: all 200ms;
@@ -179,7 +187,7 @@ input{
 
   color: rgb(235, 230, 230);
   border: 0;
-  margin: 3px 12px 3px 12px;
+  margin: 0 12px 0 12px;
   padding: 3px 7px 4px 25px;
   /* font-size: clamp(9px, 2vh, 14px); */
 
@@ -228,7 +236,7 @@ select {
 
     height: 30px;
     text-align: center;
-    font-size: clamp(6px, 2vh, 12px);
+    font-size: 1.5vh;
     color:rgba(237, 237, 237, 0.884);
 
 }
@@ -342,6 +350,40 @@ a.disabled {
 
   }
 
+  .messages {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 17vh;
+
+    width: 100%;
+
+}
+
+.alert {
+    padding: 20px 50px 20px 30px;
+    background-color: #ff382ad8;
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    width: 50%;
+    position: relative;
+    font-size: 16px;
+}
+
+.close_btn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.4s;
+    position: absolute;
+    top: 30%;
+    right: 4%;
+  }
+
   .fast{
     background-color: rgba(250, 57, 4, 0.68);
   }
@@ -375,7 +417,7 @@ a.disabled {
     }
 
    input {
-    margin: 1px 8px 1px 8px;
+    margin: 0 8px 0 8px;
     padding: 3px 5px 4px 15px;
    }
 
@@ -402,10 +444,12 @@ a.disabled {
       display: flex;
       justify-content: space-between;
 
+
     }
 
     #navbar {
       position: relative;
+
 
     }
 
