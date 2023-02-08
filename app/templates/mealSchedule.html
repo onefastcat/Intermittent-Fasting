@@ -107,13 +107,8 @@
 
 <script type="text/javascript" href="{{ url_for('static', filename='main.js')}}"></script>
 <script type="text/javascript">
-
-
   fastWindowColor('{{ fastTimes|tojson }}', '{{ meals|tojson }}');
   mealTimeColor('{{ meals|tojson }}', '{{ fastTimes|tojson }}')
-
-
-
 </script>
 {% endif %}
 {% endblock %}

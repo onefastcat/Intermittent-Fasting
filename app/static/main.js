@@ -1,10 +1,4 @@
-
-
 document.addEventListener('DOMContentLoaded', function() {
-    // var div = document.createElement('div');
-    // div.id = 'container2';
-    // div.innerText = 'Hi there!';
-    // div.className = 'border-pad';
 
 
     const menu = document.querySelector('.hamburger');
@@ -16,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nav.classList.toggle('active');
     });
 
-    //closes the dropdown when width becomes over 850, so that if width decreases, the menu is closed.
+
     const y = window.matchMedia("(min-width: 850px)");
 
     y.addEventListener('change', function() {
@@ -43,11 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
             newRow.innerText = `12:00 am`;
         }
         else if(i < 10){
-
             const inner = newRow.appendChild(document.createElement('div'));
             inner.classList.add('time_column');
             inner.innerText = `${i}:00 am`;
-
         }
         else if(i > 12){
             newRow.innerText = `${i-12}:00 pm`;
@@ -74,10 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
         newTitleElement.classList.add('day');
         tableHead = document.getElementById('title');
         tableHead.appendChild(newTitleElement);
-        //---------------------figure this out.---------------
 
         setTableHeader(newTitleElement, i);
-
 
     }
 
@@ -102,11 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-
 function changeDayText(x) {
-    if (x.matches) { // If media query matches
-
+    if (x.matches) {
         document.getElementById('Monday').innerText = 'Monday'
         document.getElementById('Tuesday').innerText = 'Tuesday'
         document.getElementById('Wednesday').innerText = 'Wednesday'
@@ -114,8 +101,8 @@ function changeDayText(x) {
         document.getElementById('Friday').innerText = 'Friday'
         document.getElementById('Saturday').innerText = 'Saturday'
         document.getElementById('Sunday').innerText = 'Sunday'
-    } else {
-
+    }
+    else {
         document.getElementById('Monday').innerText = 'M'
         document.getElementById('Tuesday').innerText = 'T'
         document.getElementById('Wednesday').innerText = 'W'
@@ -147,27 +134,24 @@ function mealTimeColor(mealsArr, fast){
     let fasting = JSON.parse(fast);
 
     //if fasting is not array it's the originalFastWindow object, which means we are
-    //showing previoud week view which doesn't have meals
+    //showing previous week view which doesn't have meals
     if(!Array.isArray(fasting)){
 
         return;
     }
-    console.log("----------------meal  Color---------------------");
+
     document.addEventListener('DOMContentLoaded', () => {
 
-     for (let meal of meals){
-
-         let time = meal['timeOfMeal'];
-         let day = meal['dayOfMeal'];
-         if(time[0] == '0') {
-            time = time.slice(1);
-         }
-
-        const el = document.getElementById(time).getElementsByClassName(day)[0];
-
-        if(el){
-            el.classList.add('meal')
-        }
+        for (let meal of meals){
+            let time = meal['timeOfMeal'];
+            let day = meal['dayOfMeal'];
+            if(time[0] == '0') {
+                time = time.slice(1);
+            }
+            const el = document.getElementById(time).getElementsByClassName(day)[0];
+            if(el){
+                el.classList.add('meal')
+            }
 
         }
     });
@@ -175,114 +159,35 @@ function mealTimeColor(mealsArr, fast){
 
 
 
-
-function fastWindowColor(fast, meals){
-
-
+function fastWindowColor(fast, meals) {
     const fastSchedule = JSON.parse(fast);
     const mealsList = JSON.parse(meals);
-    console.log("----------------fast  Window  Color---------------------");
-    console.log(fastSchedule)
+    const params = new URLSearchParams(window.location.search);
+    const week = params.get('week');
 
-
-    //if Fast schedule is not an array, it is a originalFastWindow
-    // object that contains only startFast and endFast times
-    //maybe its better to check for url query string instead of whether it is an array or object
-
-    if(!Array.isArray(fastSchedule)) {
+    if (week === 'previous' || week === 'next') {
         let startTime = fastSchedule['startFast'];
         let endTime = fastSchedule['endFast'];
         let sundayFastHoursStart = startTime;
         let mondayFastHoursEnd = endTime;
+        let latestMeal = findLatestMeal(mealsList);
+        let earliestMeal = findEarliestMeal(mealsList);
 
-        const queryString = window.location.search;
-        const params = new URLSearchParams(queryString);
-        const week = params.get('week');
-
-       //check if we are on /next-week url
-        if (week === 'next') {
-            let latestMeal = findLatestMeal(mealsList);
-
-            //change next week fast time only if the Sunday meal is late enough
-            if(latestMeal['timeOfMeal'] > startTime){
-                console.log('recalc fast monday')
-                extraFastHours = latestMeal['timeOfMeal'] - startTime + 1;
-                mondayFastHoursEnd = endTime + extraFastHours;
-            }
+        if (week === 'next' && latestMeal['timeOfMeal'] > startTime) {
+            extraFastHours = latestMeal['timeOfMeal'] - startTime + 1;
+            mondayFastHoursEnd = endTime + extraFastHours;
         }
-        //
-        else if (week === 'previous') {
-            let earliestMeal = findEarliestMeal(mealsList);
-
-
-            if(earliestMeal['timeOfMeal'] < endTime){
-                extraFastHours = endTime - parseInt(earliestMeal['timeOfMeal']);
-                sundayFastHoursStart = startTime - extraFastHours;
-            }
-
+        else if (week === 'previous' && earliestMeal['timeOfMeal'] < endTime) {
+            extraFastHours = endTime - parseInt(earliestMeal['timeOfMeal']);
+            sundayFastHoursStart = startTime - extraFastHours;
         }
-
-        // deal with this mess
-
         document.addEventListener('DOMContentLoaded', function() {
-           // console.log(fastSchedule)
-            for(let i = 0; i < 7; i++) {
-                let day = determineDayFromIndex(i);
-                fastHour = document.getElementsByClassName(day)
-
-                //sets early fastStart
-                if(day === 'Sunday'){
-                    startTime = sundayFastHoursStart;
-                }
-                //sets late fastEnd
-                else if(day === 'Monday'){
-                    endTime = mondayFastHoursEnd;
-                }
-                //resets endTime in case it is not applicable
-                else {
-                    endTime = fastSchedule['endFast'];
-                }
-                for(let j = 0; j < endTime; j++){
-                    fastHour[j].classList.add('fast');
-
-
-                }
-                for(let k = startTime; k < 24; k++){
-                    fastHour[k].classList.add('fast');
-
-                }
-            }
-
-
+            adjecentWeeksFastColor(fastSchedule, startTime, endTime, mondayFastHoursEnd, sundayFastHoursStart)
         });
     }
-
-    //maybe this event listener should listen to form being submitted
-    //insted of domcontentLoaded
-    else{
-        console.log('hereeeee')
+    else {
         document.addEventListener('DOMContentLoaded', function() {
-            for(let i = 0; i < 7; i++) {
-             let day = determineDayFromIndex(i);
-             fastHour = document.getElementsByClassName(day)
-             //won't need to check if it is array because this loop is reused specifically for this. refactor later
-                console.log(day)
-                startTime = fastSchedule[i]['startFast'];
-                endTime = fastSchedule[i]['endFast']
-
-                for(let j = 0; j < endTime; j++){
-                 fastHour[j].classList.add('fast');
-
-                }
-                for(let k = startTime; k < 24; k++){
-                    fastHour[k].classList.add('fast');
-
-                }
-
-
-            }
-
-
+            mainWeekFastColor(fastSchedule);
 
             if(hasCertainDayMeal(mealsList, 'Sunday')){
                 togglePrevNext('next');
@@ -292,15 +197,12 @@ function fastWindowColor(fast, meals){
             }
 
         });
-
     }
-
-
 
 }
 
-function hasCertainDayMeal(meals, day){
-    console.log('what is goin on')
+
+function hasCertainDayMeal(meals, day) {
 
     for(let meal of meals){
 
@@ -314,20 +216,18 @@ function hasCertainDayMeal(meals, day){
 
 
 
-function togglePrevNext(week){
+function togglePrevNext(week) {
 
     const corner = document.getElementsByClassName('corner')[0]
     lastWeek = corner.lastChild;
     nextWeek = corner.firstChild;
-    console.log('togggggggling')
-    console.log(nextWeek)
+
     if(week == 'next'){
         nextWeek.classList.remove('disabled');
     }
     else {
         lastWeek.classList.remove('disabled');
     }
-
 
 }
 
@@ -336,35 +236,7 @@ function setTableHeader(element, i){
 
 
     if(i === 0){
-        element.innerText = '';
-        element.classList.remove('day');
-        element.classList.add('corner');
-
-        const queryString = window.location.search;
-        const params = new URLSearchParams(queryString);
-        const week = params.get('week');
-
-
-         if (week === 'next') {
-
-           element.innerHTML = "<a class='arrow previous' id='arrow_back' href='/'></a><a class='arrow next' id='arrow_forward' href='/?week=next'></a>";
-           element.lastChild.classList.add('disabled');
-
-         } else if (week === 'previous') {
-
-            element.innerHTML = "<a class='arrow previous' id='arrow_back' href='/?week=previous'></a><a class='arrow next' id='arrow_forward' href='/'></a>"
-            element.firstChild.classList.add('disabled');
-
-        } else {
-
-            element.innerHTML = "<a class='arrow next' id='arrow_forward' href='/?week=next'></a><a class='arrow previous' id='arrow_back' href='/?week=previous'></a>"
-            element.firstChild.classList.add('disabled');
-            element.lastChild.classList.add('disabled');
-
-        }
-
-
-
+        setCornerButtons(element);
     }
     else if(i === 1) {
         element.innerText = 'Monday';
@@ -414,4 +286,69 @@ function findEarliestMeal(mealsList) {
         }
     }
     return earliestMeal;
+}
+
+function setCornerButtons(element) {
+    element.innerText = '';
+    element.classList.remove('day');
+    element.classList.add('corner');
+
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const week = params.get('week');
+
+    if (week === 'next') {
+        element.innerHTML = "<a class='arrow previous' id='arrow_back' href='/'></a><a class='arrow next' id='arrow_forward' href='/?week=next'></a>";
+        element.lastChild.classList.add('disabled');
+    } else if (week === 'previous') {
+        element.innerHTML = "<a class='arrow previous' id='arrow_back' href='/?week=previous'></a><a class='arrow next' id='arrow_forward' href='/'></a>"
+        element.firstChild.classList.add('disabled');
+    } else {
+        element.innerHTML = "<a class='arrow next' id='arrow_forward' href='/?week=next'></a><a class='arrow previous' id='arrow_back' href='/?week=previous'></a>"
+        element.firstChild.classList.add('disabled');
+        element.lastChild.classList.add('disabled');
+    }
+}
+
+function adjecentWeeksFastColor(fastSchedule, startTime, endTime, mondayFastHoursEnd, sundayFastHoursStart) {
+    for(let i = 0; i < 7; i++) {
+        let day = determineDayFromIndex(i);
+        fastHour = document.getElementsByClassName(day)
+
+        //sets early fastStart
+        if(day === 'Sunday'){
+            startTime = sundayFastHoursStart;
+        }
+        //sets late fastEnd
+        else if(day === 'Monday'){
+            endTime = mondayFastHoursEnd;
+        }
+        //resets endTime in case it is not applicable
+        else {
+            endTime = fastSchedule['endFast'];
+        }
+        for(let j = 0; j < endTime; j++){
+            fastHour[j].classList.add('fast');
+        }
+        for(let k = startTime; k < 24; k++){
+            fastHour[k].classList.add('fast');
+        }
+    }
+}
+
+function mainWeekFastColor(fastSchedule){
+    for(let i = 0; i < 7; i++) {
+        let day = determineDayFromIndex(i);
+        fastHour = document.getElementsByClassName(day)
+        startTime = fastSchedule[i]['startFast'];
+        endTime = fastSchedule[i]['endFast']
+
+        for(let j = 0; j < endTime; j++){
+         fastHour[j].classList.add('fast');
+
+        }
+        for(let k = startTime; k < 24; k++){
+            fastHour[k].classList.add('fast');
+        }
+    }
 }

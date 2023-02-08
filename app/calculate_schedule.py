@@ -2,7 +2,6 @@ from flask import session
 from datetime import time
 
 
-
 # set the following form values from previous submit
 # these fields are less likely to be changed
 # so they are pre-filled for user convenience
@@ -13,37 +12,30 @@ def setFormValues(form):
     form.minimumEatingWindow.data = session['minimumEatingWindow']
 
 
-
 def fastWindow(form):
 
-    # I don't like this conditional here. maybe need to check it in the routes.py
-    if form.fastingHoursStart.data:
+    startTime = int(form.fastingHoursStart.data.strftime('%H'))
+    endTime = int(form.fastingHoursEnd.data.strftime('%H'))
 
-        startTime = int(form.fastingHoursStart.data.strftime('%H'))
-        endTime = int(form.fastingHoursEnd.data.strftime('%H'))
+    if 'fastWindow' not in session:
+        session['fastWindow'] = [
+            {"day":"Monday", "startFast": startTime, "endFast": endTime},
+            {"day":"Tuesday", "startFast": startTime, "endFast": endTime},
+            {"day":"Wednesday", "startFast": startTime, "endFast": endTime},
+            {"day":"Thursday", "startFast": startTime, "endFast": endTime},
+            {"day":"Friday", "startFast": startTime, "endFast": endTime},
+            {"day":"Saturday", "startFast": startTime, "endFast": endTime},
+            {"day":"Sunday", "startFast": startTime, "endFast": endTime},
+        ]
 
-        if 'fastWindow' not in session:
-            session['fastWindow'] = [
-                {"day":"Monday", "startFast": startTime, "endFast": endTime},
-                {"day":"Tuesday", "startFast": startTime, "endFast": endTime},
-                {"day":"Wednesday", "startFast": startTime, "endFast": endTime},
-                {"day":"Thursday", "startFast": startTime, "endFast": endTime},
-                {"day":"Friday", "startFast": startTime, "endFast": endTime},
-                {"day":"Saturday", "startFast": startTime, "endFast": endTime},
-                {"day":"Sunday", "startFast": startTime, "endFast": endTime},
-            ]
+    # setting session object to keep track of beginning of fast and end of fast
+    # after daily fast window is recalculated
+    session['originalFastWindow'] = {'startFast' : startTime, 'endFast' : endTime}
+    session['minimumEatingWindow'] = form.minimumEatingWindow.data
 
-        # setting session object to keep track of beginning of fast and end of fast
-        # even after daily fast window is recalculated
-        session['originalFastWindow'] = {'startFast' : startTime,
-                                         'endFast' : endTime}
-        #------------------------------------------------------------------------------
-        # setting session object to keep track of minimum eating hours in a day
-        session['minimumEatingWindow'] = form.minimumEatingWindow.data
-
-        if(validateMealTime(form) and checkEatingWindowConflict(form)):
-            setSessionMeal(form)
-            return True
+    if(validateMealTime(form) and checkEatingWindowConflict(form)):
+        setSessionMeal(form)
+        return True
 
     return False
 
@@ -71,6 +63,7 @@ def setSessionMeal(form):
 
     return
 
+# checks for conflict with existing meals
 def checkMealConflict(form):
     dayOfMeal = form.dayOfMeal.data
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
@@ -85,9 +78,12 @@ def checkMealConflict(form):
     latestMeal = max(prevDayMealList, key=lambda x: x['timeOfMeal']) if prevDayMealList else {}
     earliestMeal = min(nextDayMealList, key=lambda x: x['timeOfMeal']) if nextDayMealList else {}
 
-    # if there is a meal the day before or next day,
-    # and if that meal is within the original fast window duration
-    # don't allow to set this new meal and return false
+    # setting these meals to None since only the meals within one week are taken into account
+    if dayOfMeal == "Monday":
+        latestMeal = None
+    if dayOfMeal == "Sunday":
+        earliestMeal = None
+
     if (latestMeal and 24 - int(latestMeal['timeOfMeal']) + timeOfMeal - 1 < originalFastDuration):
         return False
     if (earliestMeal and 24 + int(earliestMeal['timeOfMeal']) - timeOfMeal - 1 < originalFastDuration):
@@ -118,7 +114,6 @@ def validate_late_meal(form):
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
     nextFastDay = findNextDay(fastDay['day'])
     addFastHours = timeOfMeal - fastDay['startFast'] + 1
-    newFastStart = timeOfMeal+1
 
     if fastDay['day'] == 'Sunday':
         nextDayFastEnd = session['originalFastWindow']['endFast'] + addFastHours
@@ -132,6 +127,7 @@ def validate_late_meal(form):
 
     if fastDay['day'] != 'Sunday':
         nextFastDay['endFast'] = nextDayFastEnd
+
     fastDay['startFast'] = max(timeOfMeal + 1, fastDay['startFast'])
 
     return True
@@ -141,7 +137,6 @@ def validate_early_meal(form):
 
     timeOfMeal = int(form.timeOfMeal.data.strftime('%H'))
     dayOfMeal = form.dayOfMeal.data
-    newFastEnd = timeOfMeal
     fastDay = list(filter(lambda day: day['day'] == dayOfMeal, session['fastWindow']))[0]
     prevFastDay = findPrevDay(fastDay['day'])
     addFastHours_prevDay = fastDay['endFast'] - timeOfMeal
