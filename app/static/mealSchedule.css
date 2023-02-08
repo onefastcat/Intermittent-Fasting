@@ -6,6 +6,7 @@ html, body {
     padding: 0px;
     height: 100vh;
     overflow: auto;
+    color: black;
 
   }
 
@@ -16,7 +17,6 @@ html, body {
 
 .nav_container {
     align-items: center;
-    color: rgba(237, 237, 237, 0.884);
     position: relative;
     top: 0;
     width: 90%;
@@ -42,10 +42,6 @@ form {
 
 }
 
-
-
-
-
 #navbar {
 
   display: flex;
@@ -54,8 +50,6 @@ form {
   position: relative;
 
 }
-
-
 
 .sticky {
   position: fixed;
@@ -95,7 +89,7 @@ a {
   height: 45px;
   justify-content: center;
   align-items: center;
-  color:rgba(237, 237, 237, 0.884);
+
   font-weight: 100;
   padding: 10px 10px;
   font-size: clamp(4px, 5vh, 22px);
@@ -136,7 +130,7 @@ thead tr .day {
 
 #submit:hover, #reset:hover {
   background-color: rgba(255, 105, 72, 0.807);
-  color:#e9cfcf;
+  /* color:#e9cfcf; */
 }
 
 
@@ -171,7 +165,7 @@ select {
   /* font-size: clamp(9px, 3vh, 14px); */
   -webkit-appearance: none;
   appearance: none;
-  color: white;
+  /* color: white; */
   border: 0;
   line-height: 1;
   outline: 0;
@@ -202,7 +196,7 @@ select {
   height: 30px;
   text-align: center;
   font-size: 1.5vh;
-  color:rgba(237, 237, 237, 0.884);
+  /* color:rgba(237, 237, 237, 0.884); */
 
 }
 
