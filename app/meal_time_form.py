@@ -15,9 +15,9 @@ class MealTime(FlaskForm):
         else:
             number_of_hours_choices.append(hour)
 
-    fastingHoursStart = TimeField("Start fast at", validators=[InputRequired()])
-    fastingHoursEnd = TimeField("End fast at", validators=[InputRequired()])
-    minimumEatingWindow = SelectField("Eating window (hours) ", choices=number_of_hours_choices, validators=[InputRequired()])
+    fastingHoursStart = TimeField("Start Fast", validators=[InputRequired()])
+    fastingHoursEnd = TimeField("End Fast", validators=[InputRequired()])
+    minimumEatingWindow = SelectField("Eating Window (hr)", choices=number_of_hours_choices, validators=[InputRequired()])
     dayOfMeal = SelectField("Meal Day",choices=day_choices, validators=[InputRequired()])
     timeOfMeal = TimeField("Meal Time", validators=[InputRequired()])
     submit = SubmitField("Calculate")

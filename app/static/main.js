@@ -1,24 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-
-    const menu = document.querySelector('.hamburger');
     const nav = document.querySelector('#navbar');
 
 
-    menu.addEventListener('click', function() {
-        menu.classList.toggle('active');
-        nav.classList.toggle('active');
-    });
-
-
     const y = window.matchMedia("(min-width: 850px)");
-
-    y.addEventListener('change', function() {
-        if(y.matches){
-            nav.classList.remove('active');
-            menu.classList.remove('active');
-        }
-    });
 
 
     const parent = document.getElementsByClassName('table_head')[0];
@@ -88,6 +73,19 @@ document.addEventListener('DOMContentLoaded', function() {
     x.addEventListener('change', changeDayText);
 
 
+    const form_btn = document.getElementById('show_btn');
+    form_btn.addEventListener('click', () => {
+        document.getElementById('form').style = "display: block;";
+        document.getElementById('page-mask').style = "display: block;";
+    });
+
+    document.getElementById('page-mask').addEventListener('click', function (event) {
+        document.getElementById('form').style = "display: none;";
+        event.target.style= "display: none;";
+    })
+
+
+
 }, false);
 
 
@@ -140,7 +138,7 @@ function mealTimeColor(mealsArr, fast){
         return;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
 
         for (let meal of meals){
             let time = meal['timeOfMeal'];
@@ -324,6 +322,7 @@ function adjecentWeeksFastColor(fastSchedule, startTime, endTime, mondayFastHour
             endTime = mondayFastHoursEnd;
         }
         //resets endTime in case it is not applicable
+        //maybe put it without the else
         else {
             endTime = fastSchedule['endFast'];
         }
@@ -345,10 +344,13 @@ function mainWeekFastColor(fastSchedule){
 
         for(let j = 0; j < endTime; j++){
          fastHour[j].classList.add('fast');
+        //  fastHour[j].classList.remove('data_cell')
 
         }
         for(let k = startTime; k < 24; k++){
             fastHour[k].classList.add('fast');
+            // fastHour[k].classList.remove('data_cell')
         }
     }
+
 }
