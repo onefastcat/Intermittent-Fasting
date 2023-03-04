@@ -4,85 +4,61 @@
 <head>
     <title>Intermittent Fasting Scheduler</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='mealSchedule.css') }}">
-
     <meta name=viewport content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-
   <div class="container">
-    <!--
-    <div class="nav_container sticky">
 
-      <nav id="navbar" class = "sticky"> -->
+    <div class="header">
+      <div class="title">
+        <h1>Intermittent Fasting Scheduler</h1>
+        <p>Schedule your cheat meals</p>
+      </div>
+      <div id="schedule_btn">
+        <button id="show_btn"></button>
+        <a href="/clear" type="reset" id='reset' class="reset_btn" name="reset_btn" value="Refresh">RESET</a>
+      </div>
+    </div>
 
-        <div id="schedule_btn">
-          <button id="show_btn"></button>
-          <a href="/clear" type="reset" id='reset' name="reset_btn" value="Refresh"><img src="static/images/refresh-arrow.png" class="reset_btn" alt="refresh" /></a>
-          <!-- <a href="https://www.flaticon.com/free-icons/refresh" title="refresh icons">Refresh icons created by bukeicon - Flaticon</a> -->
+    <div class="form">
+      <form action="" method="post" style="display:none" id="form">
+        {{ form.hidden_tag() }}
 
+        <div>
+        {{form.fastingHoursStart.label}}
+        {{form.fastingHoursStart() }}
+        </div>
+        <div>
+        {{form.fastingHoursEnd.label}}
+        {{form.fastingHoursEnd() }}
+        </div>
+        <div>
+        {{form.minimumEatingWindow.label}}
+        {{form.minimumEatingWindow() }}
+        </div>
+        <div>
+          {{form.dayOfMeal.label}}
+          {{ form.dayOfMeal() }}
+        </div>
+        <div>
+          {{form.timeOfMeal.label}}
+          {{ form.timeOfMeal() }}
+        </div>
+        <div>
+          {{ form.submit() }}
         </div>
 
-        <div class="form">
-          <form action="" method="post" style="display:none" id="form">
-           {{ form.hidden_tag() }}
-
-           <div id="start-end">
-              <div>
-              {{form.fastingHoursStart.label}}
-              {{form.fastingHoursStart() }}
-              </div>
-              <div>
-
-              {{form.fastingHoursEnd.label}}
-              {{form.fastingHoursEnd() }}
-              </div>
-
-            <div>
-            {{form.minimumEatingWindow.label}}
-            {{form.minimumEatingWindow() }}
-            </div>
-            <div>
-              {{form.dayOfMeal.label}}
-
-              {{ form.dayOfMeal() }}
-            </div>
-            </div>
-            <div>
-              {{form.timeOfMeal.label}}
-
-              {{ form.timeOfMeal() }}
-            </div>
-            <div>
-              {{ form.submit() }}
-            </div>
-
-          </form>
-        </div>
-
-
-        <!-- <button class="hamburger">
-          <div class="bar"></div>
-        </button> -->
-
-
-      <!-- </nav>
-
-    </div> -->
-
+      </form>
+    </div>
 
     <div class="week">
-
-
       <table class="week_schedule_container">
             <thead class="table_head"></thead>
             <tbody class="table_body"></tbody>
       </table>
-
     </div>
-
-    <div class="footer"><a href="https://www.flaticon.com/free-icons/refresh" title="refresh icons">Refresh icon created by bukeicon - Flaticon</a></div>
 
     <div id="page-mask" style="display:none"></div>
     <div class="messages">
@@ -97,15 +73,10 @@
       {% endif %}
       {% endwith %}
     </div>
-
   </div>
-
 
     <script src="{{url_for('static', filename='main.js')}}"></script>
 </body>
-<!-- {% block javascript %}
-
-{% endblock%} -->
 {% block script%}
 {% if fastTimes %}
 

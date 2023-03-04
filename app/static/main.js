@@ -1,14 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    const nav = document.querySelector('#navbar');
-
-
-    const y = window.matchMedia("(min-width: 850px)");
-
-
     const parent = document.getElementsByClassName('table_head')[0];
     const tableBody = document.getElementsByClassName('table_body')[0];
-
 
     let tableHead = document.createElement('tr');
     tableHead.id = 'title';
@@ -17,27 +10,24 @@ document.addEventListener('DOMContentLoaded', function() {
     for(let i = 0; i < 24; i++){
         let newRow = document.createElement('tr');
         newRow.classList.add('hour');
+        const inner = newRow.appendChild(document.createElement('div'));
+        inner.classList.add('time_column');
 
         if(i === 0) {
-            newRow.innerText = `12:00 am`;
+            inner.innerText = `12:00 am`;
         }
         else if(i < 10){
-            const inner = newRow.appendChild(document.createElement('div'));
-            inner.classList.add('time_column');
             inner.innerText = `${i}:00 am`;
         }
         else if(i > 12){
-            newRow.innerText = `${i-12}:00 pm`;
-
+            inner.innerText = `${i-12}:00 pm`;
         }
         else {
-            newRow.innerText = `${i}:00 am`;
-
+            inner.innerText = `${i}:00 am`;
         }
 
         if(i === 12){
-            newRow.innerText = `12:00 pm`;
-
+            inner.innerText = `12:00 pm`;
         }
 
         newRow.id = i;
@@ -51,9 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newTitleElement.classList.add('day');
         tableHead = document.getElementById('title');
         tableHead.appendChild(newTitleElement);
-
         setTableHeader(newTitleElement, i);
-
     }
 
     let hourElement = document.getElementsByClassName('hour');
@@ -68,10 +56,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const x = window.matchMedia("(min-width: 700px)");
+    const x = window.matchMedia("(min-width: 750px)");
     changeDayText(x);
     x.addEventListener('change', changeDayText);
-
 
     const form_btn = document.getElementById('show_btn');
     form_btn.addEventListener('click', () => {
@@ -83,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('form').style = "display: none;";
         event.target.style= "display: none;";
     })
-
-
 
 }, false);
 
@@ -134,7 +119,6 @@ function mealTimeColor(mealsArr, fast){
     //if fasting is not array it's the originalFastWindow object, which means we are
     //showing previous week view which doesn't have meals
     if(!Array.isArray(fasting)){
-
         return;
     }
 
@@ -196,7 +180,6 @@ function fastWindowColor(fast, meals) {
 
         });
     }
-
 }
 
 
@@ -211,7 +194,6 @@ function hasCertainDayMeal(meals, day) {
 
     return false;
 }
-
 
 
 function togglePrevNext(week) {
@@ -322,7 +304,6 @@ function adjecentWeeksFastColor(fastSchedule, startTime, endTime, mondayFastHour
             endTime = mondayFastHoursEnd;
         }
         //resets endTime in case it is not applicable
-        //maybe put it without the else
         else {
             endTime = fastSchedule['endFast'];
         }
@@ -343,13 +324,12 @@ function mainWeekFastColor(fastSchedule){
         endTime = fastSchedule[i]['endFast']
 
         for(let j = 0; j < endTime; j++){
-         fastHour[j].classList.add('fast');
-        //  fastHour[j].classList.remove('data_cell')
+            fastHour[j].classList.add('fast');
 
         }
         for(let k = startTime; k < 24; k++){
             fastHour[k].classList.add('fast');
-            // fastHour[k].classList.remove('data_cell')
+
         }
     }
 

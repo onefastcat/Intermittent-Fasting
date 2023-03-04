@@ -8,18 +8,12 @@ bp = Blueprint('main', __name__)
 @bp.route('/', methods=["GET", "POST"])
 def main():
 
-
     form = MealTime()
-
 
     if request.method == 'GET':
         if request.args.get('week') == 'next' or request.args.get('week') == 'previous':
             setFormValues(form)
             return render_template('mealSchedule.html',form=form, fastTimes=session['originalFastWindow'], meals=session['meals'])
-
-
-    print('--------------in main()-------------')
-
 
 
     if form.validate_on_submit():
@@ -38,8 +32,6 @@ def main():
             if('meals' in session):
                 return render_template('mealSchedule.html', form=form, fastTimes=session['fastWindow'], meals=session['meals'] )
             return render_template('mealSchedule.html', form=form)
-
-        print('---------form valid----------')
 
         # if all checks pass
         # return the home page

@@ -29,7 +29,6 @@ class MealTime(FlaskForm):
         fastingHours = abs(endFast - startFast)
         eatingHours = int(form.minimumEatingWindow.data)
 
-        #if eating hours and fasting hours exceed 24 hours return false
         if  eatingHours + fastingHours > 24:
             return False
 
