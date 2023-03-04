@@ -39,8 +39,7 @@ class MealTime(FlaskForm):
         endFast = int(form.fastingHoursEnd.data.strftime('%H'))
 
         if(startFast < endFast):
-            print(startFast)
-            print(endFast)
+
             return False
 
         return True

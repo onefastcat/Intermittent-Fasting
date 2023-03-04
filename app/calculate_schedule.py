@@ -6,7 +6,6 @@ from datetime import time
 # these fields are less likely to be changed
 # so they are pre-filled for user convenience
 def setFormValues(form):
-    print('------------in setFormValues----------')
     form.fastingHoursEnd.data = time(session['originalFastWindow']['endFast'], 00, 00)
     form.fastingHoursStart.data = time(session['originalFastWindow']['startFast'], 00, 00)
     form.minimumEatingWindow.data = session['minimumEatingWindow']
